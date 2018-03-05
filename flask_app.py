@@ -44,7 +44,7 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
-	return sqlite3.connect('F:\GHI_latest_project\global-health-impact-web\ghi.db')
+	return sqlite3.connect('/home/cqi1/mysite/ghi.db')
 
 @app.before_request
 def before_request():
@@ -161,7 +161,7 @@ def diseasepg(dyear,ddisease):
             upp = ddisease.upper()
             speclocate = [dyear, ddisease,upp]
             return render_template('disease.html', navsub=4, showindex=1, diseasepie = piedata, bar1data = bar1data, disease=0, bar1 = bar1, bar2 = bar2, bar3 = bar3, speclocate = speclocate, scrolling=1)
-       
+
         elif ddisease == 'Malaria':
             piedata = []
             bar1data = []
@@ -196,7 +196,32 @@ def diseasepg(dyear,ddisease):
             upp = ddisease.upper()
             speclocate = [dyear, ddisease,upp]
             return render_template('disease.html', navsub=4, showindex=1, piedat=piedat, clickdat=clickdat, index=index, disease=1, speclocate = speclocate, scrolling=1)
-      
+        elif ddisease == 'hiv':
+            piedat = []
+            clickdat = []
+            index = []
+            speclocate = [dyear, ddisease,'HIV/AIDS']
+            g.db = connect_db()
+            cur = g.db.execute(' select country, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf from diseaseall2010 ')
+            data = cur.fetchall()
+            for row in data:
+                country = row[0]
+                tb = row[1]
+                malaria = row[2]
+                hiv = row[3]
+                roundworm = row[4]
+                hookworm = row[5]
+                whipworm = row[6]
+                schistosomiasis = row[7]
+                onchocerciasis = row[8]
+                lf = row[9]
+                xx = [country,hiv]
+                xy = [country,tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
+                piedat.append(xx)
+                clickdat.append(xy)
+            piedat.insert(0,['Country','DALY'])
+            return render_template('disease.html', navsub=4, showindex=1, piedat=piedat, clickdat=clickdat, disease=4, speclocate = speclocate, scrolling=1)
+
         else:
             piedat = []
             clickdat = []
@@ -224,6 +249,10 @@ def diseasepg(dyear,ddisease):
             piedat.insert(0,['Country','DALY'])
             upp = ddisease.upper()
             speclocate = [dyear, ddisease,upp]
+            print(piedat)
+            print(clickdat)
+            print(index)
+            print(speclocate)
             return render_template('disease.html', navsub=4, showindex=1, piedat=piedat, clickdat=clickdat, index=index, disease=1, speclocate = speclocate, scrolling=1)
 
     elif dyear == '2013':
@@ -299,6 +328,31 @@ def diseasepg(dyear,ddisease):
             upp = ddisease.upper()
             speclocate = [dyear, ddisease,upp]
             return render_template('disease.html', navsub=4, showindex=1, piedat=piedat, clickdat=clickdat, index=index, disease=1, speclocate = speclocate, scrolling=1)
+        elif ddisease == 'hiv':
+            piedat = []
+            clickdat = []
+            index = []
+            speclocate = [dyear, ddisease,'HIV/AIDS']
+            g.db = connect_db()
+            cur = g.db.execute(' select country, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf from diseaseall2013 ')
+            data = cur.fetchall()
+            for row in data:
+                country = row[0]
+                tb = row[1]
+                malaria = row[2]
+                hiv = row[3]
+                roundworm = row[4]
+                hookworm = row[5]
+                whipworm = row[6]
+                schistosomiasis = row[7]
+                onchocerciasis = row[8]
+                lf = row[9]
+                xx = [country,hiv]
+                xy = [country,tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
+                piedat.append(xx)
+                clickdat.append(xy)
+            piedat.insert(0,['Country','DALY'])
+            return render_template('disease.html', navsub=4, showindex=1, piedat=piedat, clickdat=clickdat, disease=4, speclocate = speclocate, scrolling=1)
 
 
 @app.route('/reports')
