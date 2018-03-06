@@ -44,7 +44,7 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
-	return sqlite3.connect('F:/global-health-impact-web/ghi.db')
+	return sqlite3.connect('ghi.db')
 
 @app.before_request
 def before_request():
@@ -113,6 +113,7 @@ def diseaseinx():
 
 @app.route('/index/disease/<dyear>/<ddisease>')
 def diseasepg(dyear,ddisease):
+
     if dyear == '2010':
         if ddisease == 'summary':
             piedata = []
@@ -162,9 +163,11 @@ def diseasepg(dyear,ddisease):
             speclocate = [dyear, ddisease,upp]
             return render_template('disease.html', navsub=4, showindex=1, diseasepie = piedata, bar1data = bar1data, disease=0, bar1 = bar1, bar2 = bar2, bar3 = bar3, speclocate = speclocate, scrolling=1)
 
+
         elif ddisease == 'malaria':
-            piedata = []
+            piedat = []
             bar1data = []
+            clickdat = []
             bar1 = []
             bar2 = []
             bar3 = []
@@ -186,14 +189,16 @@ def diseasepg(dyear,ddisease):
                 total = tb+malaria+hiv+roundworm+hookworm+whipworm+schistosomiasis+onchocerciasis+lf
                 xx = [country,total]
                 xy = [country,tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
-                #piedata.append(xx)
-                #clickdata.append(xy)
-            #seq = sorted(piedata, key=lambda sc: sc[1], reverse=True)
-            #index = [seq.index(v) for v in piedata]
-            #piedata.insert(0,['Country','DALY'])
+                piedat.append(xx)
+                clickdat.append(xy)
+            seq = sorted(piedat, key=lambda sc: sc[1], reverse=True)
+            index = [seq.index(v) for v in piedat]
+            piedat.insert(0,['Country','DALY'])
             upp = ddisease.upper()
             speclocate = [dyear, ddisease,upp]
-            return render_template('disease.html', navsub=4, showindex=1,disease=2, speclocate = speclocate, scrolling=1)
+            #return render_template('disease.html', navsub=4, showindex=1,disease=2, speclocate = speclocate, scrolling=1)
+            return render_template('disease.html', navsub=4, showindex=1, piedat=piedat, clickdat=clickdat, index=index, disease=2, speclocate = speclocate, scrolling=1)
+
 
         elif ddisease == 'tb':
             piedata = []
@@ -1683,7 +1688,8 @@ def dbviewer(table):
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)
 
 @app.teardown_appcontext
 def close_connection(exception):
