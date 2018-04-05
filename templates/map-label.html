@@ -1,13 +1,29 @@
 <div id="" class="" style="padding: 10px 0">
-            <table style="margin:auto">
-                <tr style="float:center">
-                    <td style="vertical-align: middle;"><div class="colorbox" style="background-color:#588D9A;"></div></td>
-                    <td style="vertical-align: middle;"class="legendtxt">1 - 500K</td>
-                    <td style="vertical-align: middle;padding-left:25px;"><div class="colorbox" style="background-color:#5CB85C;"></div></td>
-                    <td style="vertical-align: middle;"class="legendtxt">500K - 10M</td>
-                    <td style="vertical-align: middle;padding-left:25px"><div class="colorbox" style="background-color:#FFB31C;"></div></td>
-                    <td style="vertical-align: middle;"class="legendtxt">10M - 37M</td>
-                </tr>
 
-            </table>
-        </div>
+    <table style="margin:auto">
+        <tr style="float:center">
+            <td style="vertical-align: middle;"><div class="colorbox" style="background-color:#588D9A;"></div></td>
+            <td style="vertical-align: middle;" class="legendtxt" id="sub1"></td>
+            <td style="vertical-align: middle;padding-left:25px;"><div class="colorbox" style="background-color:#5CB85C;"></div></td>
+            <td style="vertical-align: middle;" class="legendtxt" id="sub2"></td>
+            <td style="vertical-align: middle;padding-left:25px"><div class="colorbox" style="background-color:#FFB31C;"></div></td>
+            <td style="vertical-align: middle;" class="legendtxt" id="sub3"></td>
+        </tr>
+
+    </table>
+</div>
+<script>
+    var total = {{maxVal}};
+    part1 = (parseInt(total*0.33)).toString().substring(0,3);
+    sub1 = "1 - "+part1+"K";
+    document.getElementById('sub1').innerHTML = sub1;
+
+    part2 = (parseInt(total*0.66)).toString().substring(0,2);
+    sub2 = part1+"K - "+part2+"M";
+    document.getElementById('sub2').innerHTML = sub2;
+
+    part3 = (parseInt(total)).toString().substring(0,2);
+    sub3 = part2+"M - "+part3+"M";
+    document.getElementById('sub3').innerHTML = sub3;
+
+</script>
