@@ -1,5 +1,5 @@
 # Global-Health-Impact
-Get your GHI project up and running on local machine.
+A web application for Global Health Impact presenting measures for pharmaceutical products’ impact on global health to advance access to essential medicines
 
 # Environment setup for python and flask.
 
