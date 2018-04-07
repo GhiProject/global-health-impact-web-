@@ -2036,3 +2036,7 @@ if __name__ == '__main__':
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
+
+@app.errorhandler(500)
+def internal_error_500(e):
+    return render_template('error500.html',showindex=1, navsub=1), 500
