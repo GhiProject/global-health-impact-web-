@@ -42,7 +42,7 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
-    return sqlite3.connect('F:/global-health-impact-web/ghi.db')
+    return sqlite3.connect('/Users/shileicui/Desktop/GHI_Website/new_website/global-health-impact-web-/ghi.db')
 
 @app.before_request
 def before_request():
@@ -2036,3 +2036,7 @@ if __name__ == '__main__':
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
+
+@app.errorhandler(500)
+def internal_error_500(e):
+    return render_template('error500.html',showindex=1, navsub=1), 500
