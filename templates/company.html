@@ -57,9 +57,12 @@
             <div class="piewrap">
                 <div class="piechart" id="manupie1"></div>
             </div>
-            <div class="pielegend">
-                <table style="margin:auto;white-space: nowrap;">
+            <div class="pielegend" style="width:380px; overflow:auto;">
+             <table style="margin:auto;white-space: nowrap;" cellspacing="0" cellpadding="0" border="0" width="420">
+<td>
+<table cellspacing="2" cellpadding="0" border="0" width="350" >
                     {% for row in pielab1 %}
+                    
                     <tr style="float:center">
                         <td class="tablecell"><div class="colorbox" style="background-color:#{{ row.2 |safe }};"></div></td>
                         <td class="tablecell legendtxt" title="{{ row.0 |safe }}">{{ row.1 |safe }}</td>
@@ -70,8 +73,11 @@
                         <td class="tablecell leftcell"><div class="colorbox" style="background-color:#{{ row.11 |safe }};"></div></td>
                         <td class="tablecell legendtxt" title="{{ row.9 |safe }}">{{ row.10 |safe }}</td>
                     </tr>
+                    
                     {% endfor %}
-                </table>
+</table>
+</td>
+</table>
             </div>
         </div>
     </div>
@@ -96,8 +102,10 @@
             <div class="piewrap">
                 <div class="piechart" id="manupie2"></div>
             </div>
-            <div class="pielegend">
-                <table style="margin:auto;white-space: nowrap;">
+            <div class="pielegend" style="width:380px; overflow:auto;">
+                <table style="margin:auto;white-space: nowrap;" cellspacing="0" cellpadding="0" border="0" width="420">
+                <td>
+<table cellspacing="2" cellpadding="0" border="0" width="350" >
                     {% for row in pielab2 %}
                     <tr style="float:center">
                         <td class="tablecell"><div class="colorbox" style="background-color:#{{ row.2 |safe }};"></div></td>
@@ -110,6 +118,8 @@
                         <td class="tablecell legendtxt" title="{{ row.9 |safe }}">{{ row.10 |safe }}</td>
                     </tr>
                     {% endfor %}
+                    </table>
+                    </td>
                 </table>
             </div>
         </div>

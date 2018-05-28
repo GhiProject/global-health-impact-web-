@@ -42,7 +42,7 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
-     return sqlite3.connect('F:/global-health-impact-web/ghi.db')
+     return sqlite3.connect('C:\GHI\global-health-impact-web--1/ghi.db')
 
 @app.before_request
 def before_request():
