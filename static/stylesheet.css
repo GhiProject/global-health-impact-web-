@@ -169,31 +169,36 @@ body {
 .redtxt {
     font-size: 36px;
     color: #FF7474;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'avenir next regular', sans-serif;
 }
 .bluetxt {
     font-size: 36px;
     color: #0083C4;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'avenir next regular', sans-serif;
 }
 .bluetxtabout {
     font-size: 28px;
     color: #0083C4;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'avenir next demi bold', sans-serif;
+}
+.redtxtabout {
+    font-size: 28px;
+    color: #FF7474;
+    font-family: 'avenir next demi bold', sans-serif;
 }
 
 .newsred {
-    font-size: 24px;
+    font-size: 18px;
     color: #FF7474;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'avenir next demi bold', sans-serif;
 }
 .newsblue {
-    font-size: 24px;
+    font-size: 18px;
     color: #0083C4;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'avenir next demi bold', sans-serif;
 }
 .contentbox {
-    padding: 20px;
+    padding: 5px;
 }
 .contentbox:hover {
     background-color: #EDDFDF;
@@ -206,7 +211,7 @@ body {
 .txtcontent {
     font-size: 18px;
     color: #404040;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'avenir next regular', sans-serif;
 }
 .smalltxt {
     font-size: 14px;
@@ -331,13 +336,14 @@ body {
 @media only screen and (min-width: 940px) {
     .cap {
         font-size: 24px;
-        text-align: center;
-        font-family: 'Nunito', sans-serif;
+        text-align: left;
+        font-family: 'avenir next regular', sans-serif;
+		padding-left:100px;
     }
     .cap2 {
         font-size: 30px;
         text-align: center;
-        font-family: 'Nunito', sans-serif;
+        font-family: 'avenir next regular', sans-serif;
         font-weight: bolder;
     }
 }
@@ -405,9 +411,10 @@ body {
     z-index:1;
 }
 .abtlabel {
-    font-family: 'Nunito', sans-serif;
-    font-weight: bolder;
-    font-size: 16px;
+    font-family: 'avenir next', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+	color:#404040;
 }
 #paperthumb {
     width: 50%;
