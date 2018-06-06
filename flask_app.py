@@ -1,4 +1,3 @@
-
 # A very simple Flask Hello World app for you to get started with...
 
 from flask import Flask, render_template, g
@@ -6,7 +5,7 @@ from openpyxl.compat import range
 import pandas as pd
 import sqlite3
 import json
-import requests
+
 import math
 
 app = Flask(__name__)
@@ -59,10 +58,6 @@ diseasedict = {'tb':'TB','hiv':'HIV','malaria':'Malaria','onchocerciasis':'Oncho
 
 @app.route('/')
 def index():
-    response = requests.get('https://script.google.com/macros/s/AKfycbzDYDcu-k477vpDMRFREeB6skJ7DgNsMv4xjCwSKhYBiajILw/exec')
-    for row in response:
-        print(row)
-    
     return render_template('index.html', showthediv=0)
 
 
@@ -738,7 +733,37 @@ def diseasepg(dyear, ddisease):
 
 @app.route('/reports')
 def reports():
-    return render_template('reports.html')
+    repdata = g.db.execute('select * from reports2010')
+    repbar = g.db.execute('select * from reportsdetail2010')
+
+    reports2010 = repdata.fetchall()
+    reportsbar2010 = repbar.fetchall()
+    reportdict = []
+    reportbar2010 = []
+    print(reports2010)
+    print(reportsbar2010)
+    for i in reports2010:
+        year = i[0]
+        cname = str(i[1])
+        timpactscre = i[2]
+        rank = i[3]
+        numOfDis = i[4]
+        row = [year, cname, timpactscre, rank, numOfDis]
+        reportdict.append(row)
+    print(reportdict)
+
+    for i in reportsbar2010:
+        year = i[0]
+        cname = str(i[1])
+        drug = str(i[2])
+        disease = str(i[3])
+        impact = i[4]
+        rowbar = [year, cname, drug, disease, impact]
+        reportbar2010.append(rowbar)
+    print(reportbar2010)
+
+
+    return render_template('reports.html',report2010=reportdict, reportdetail2010 = reportbar2010)
 
 @app.route('/reports/<company>')
 def reportcomp(company):
@@ -1031,12 +1056,15 @@ def country():
                 # print(tmp)
                 sort.append(tmp)
             i += 1
-    # print("printing sort")
-    # print(sort)
+
+    print("********************")
+    print("barlist")
+    print(barlist)
     speclocate = [year,name,drugg]
     mapdata.insert(0,['Country','Score'])
-    sort.append(mapdata)
-
+    #sort.append(mapdata)
+    print("printing sort")
+    print(sort)
     g.db.close()
     return render_template('country.html', showindex=1, navsub=1, name=name, color=color, mapdata=mapdata, sortedlist=sortedlist, sortedval = sort, year=year, isall=isall, barlist = barlist, speclocate = speclocate)
 
@@ -1064,7 +1092,7 @@ def countrydata(xdisease,xyear):
                 ' select country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf from country2010 ')
         elif xyear == '2010':
             br = g.db.execute(' select country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf from countryp2010 ')
-            cur = g.db.execute(' select country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf from country2010 ')
+            cur = g.db.execute(' select country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf from countryp2010 ')
         elif xyear == '2013':
             cur = g.db.execute(' select country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf from country2013 ')
             br = g.db.execute(' select country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf from countryp2013 ')
@@ -1243,10 +1271,16 @@ def countrydata(xdisease,xyear):
             sort.append(tmp)
             print(sort)
     speclocate = [xyear,name,drugg]
-    sort = mapdata
+    #sort = mapdata
     print(sort)
     mapdata.insert(0,['Country','Score'])
+    #sort.append(mapdata)
 
+    print("printing sort")
+    print(sort)
+    print("********************")
+    print("barlist")
+    print(barlist)
     g.db.close()
     return render_template('country.html', showindex=1, navsub=1, name=name, color=color, mapdata=mapdata, sortedlist=sortedlist, sortedval = sort, year=year, isall=isall, barlist = barlist, speclocate = speclocate,scrolling=1,disease = xdisease)
 

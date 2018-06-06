@@ -22,7 +22,6 @@
     google.charts.load('upcoming', {'packages':['geochart','corechart']});
     google.charts.setOnLoadCallback(drawMap);
     var forBarData = {{barlist |safe}};
-    console.log(barlist)
     function drawMap() {
         var data = google.visualization.arrayToDataTable(
            {{ mapdata |safe }}
@@ -200,21 +199,10 @@
         <div>
         <div id="chart_div" style="width: 100%; height: 350px; overflow-y: auto;overflow-x: hidden;">
             {% if isall == 0 %}
-             {% set count = 0 %}
             {% for cntry in barlist %}
-            alert(cntry)
-            <!-- {{cntry}} -->
-            <a onclick="countryclickAll({{cntry.2}})">
-                <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';">{{ cntry.0.0 }}</div>
-                <div class="barfloats" style="width: {{ cntry.0.2 }}%;background-color: #FFB31C;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.3 }}%;background-color: #0083CA;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.4 }}%;background-color: #EF3E2E;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.5 }}%;background-color: #003452;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.6 }}%;background-color: #86AAB9;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.7 }}%;background-color: #CAEEFD;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.8 }}%;background-color: #546675;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.9 }}%;background-color: #5CB85C;"></div>
-                <div class="barfloats" style="width: {{ cntry.0.10 }}%;background-color: #305516;"></div>
+            <a onclick="countryClick({{loop.index - 1}})" title="{{ cntry.0 }}: {{ cntry.1 }}">
+                <div style="padding-top: 2px; font-family: 'Nunito','sans-serif';">{{ cntry.0 }}</div>
+                <div style="width: {{ cntry.2 }}%;background-color: {{ color }};height: 10px;"></div>
             </a>
             {% endfor %}
             {% endif %}
