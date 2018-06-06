@@ -5,7 +5,8 @@ from flask import Flask, render_template, g
 from openpyxl.compat import range
 import pandas as pd
 import sqlite3
-
+import json
+import requests
 import math
 
 app = Flask(__name__)
@@ -42,7 +43,7 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
-     return sqlite3.connect('F:/global-health-impact-web/ghi.db')
+     return sqlite3.connect('C:\my work\GHI\global-health-impact-web-\ghi.db')
 
 @app.before_request
 def before_request():
@@ -58,6 +59,10 @@ diseasedict = {'tb':'TB','hiv':'HIV','malaria':'Malaria','onchocerciasis':'Oncho
 
 @app.route('/')
 def index():
+    response = requests.get('https://script.google.com/macros/s/AKfycbzDYDcu-k477vpDMRFREeB6skJ7DgNsMv4xjCwSKhYBiajILw/exec')
+    for row in response:
+        print(row)
+    
     return render_template('index.html', showthediv=0)
 
 
