@@ -1,15 +1,28 @@
 function cont2010() {
     document.getElementById('cont2010').style.display = 'block';
     document.getElementById('cont2013').style.display = 'none';
+    document.getElementById('cont2015').style.display = 'none';
 }
 function cont2013() {
     document.getElementById('cont2013').style.display = 'block';
     document.getElementById('cont2010').style.display = 'none';
+    document.getElementById('cont2015').style.display = 'none';
+}
+function cont2015() {
+    document.getElementById('cont2015').style.display = 'block';
+    document.getElementById('cont2010').style.display = 'none';
+    document.getElementById('cont2013').style.display = 'none';
 }
 function yearclick(showthis,hidethis) {
     document.getElementById(hidethis).style.display = 'none';
     document.getElementById(showthis).style.display = 'block';
 }
+function new_yearclick(showthis,hidethis, hidethisonealso) {
+    document.getElementById(hidethisonealso).style.display = 'none';
+    document.getElementById(hidethis).style.display = 'none';
+    document.getElementById(showthis).style.display = 'block';
+}
+
 
 function dropNav() {
     document.getElementById("navBar").classList.toggle("show");
@@ -50,11 +63,17 @@ if (window.location.hash){
       if (hash == "relocation2013"){
          document.getElementById('country2013').style.display = 'block';
       }
+      if (hash == "relocation2015"){
+         document.getElementById('country2015').style.display = 'block';
+      }
       if (hash == "relocation_manu2010"){
          document.getElementById('manu2010').style.display = 'block';
       }
       if (hash == "relocation_manu2013"){
          document.getElementById('manu2013').style.display = 'block';
+      }
+      if (hash == "relocation_manu2015"){
+         document.getElementById('manu2015').style.display = 'block';
       }
       if (hash == "relocation_ph2010"){
          document.getElementById('patent2010').style.display = 'block';
@@ -62,17 +81,26 @@ if (window.location.hash){
       if (hash == "relocation_ph2013"){
          document.getElementById('patent2013').style.display = 'block';
       }
+       if (hash == "relocation_ph2015"){
+         document.getElementById('patent2015').style.display = 'block';
+      }
       if (hash == "relocation_drug2010"){
          document.getElementById('drug2010').style.display = 'block';
       }
       if (hash == "relocation_drug2013"){
          document.getElementById('drug2013').style.display = 'block';
       }
+      if (hash == "relocation_drug2015"){
+         document.getElementById('drug2015').style.display = 'block';
+      }
       if (hash == "relocation_disease2010"){
          document.getElementById('disease2010').style.display = 'block';
       }
       if (hash == "relocation_disease2013"){
          document.getElementById('disease2013').style.display = 'block';
+      }
+      if (hash == "relocation_disease2015"){
+         document.getElementById('disease2015').style.display = 'block';
       }
    }
 });

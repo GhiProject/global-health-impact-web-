@@ -18,7 +18,7 @@ conn.execute('''CREATE TABLE countrybydis2013
 #datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1996016204&single=true&output=csv'
 datasrc = 'ORS_Daly_2010_2013.csv'
 df = pd.read_csv(datasrc, skiprows=1)
-for i in range (1,216):
+for i in range (1,218):
     temprow = []
     temprow.append(df.iloc[i,0])
     for k in range(1,10):
@@ -30,7 +30,7 @@ for i in range (1,216):
     print(temprow)
     conn.execute(' insert into countrybydis2010 values (?,?,?,?,?,?,?,?,?,?)', temprow)
 
-for i in range (1,216):
+for i in range (1,218):
     temprow = []
     temprow.append(df.iloc[i,11])
     for k in range(12,21):

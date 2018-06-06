@@ -28,7 +28,7 @@
             height: 300,
             'chartArea':{top:0},
             legend:'none',
-            slices: [{color: '#00cab1'},{% for row in impactpie %}{color: '{{row.3 |safe}}'},{% endfor %}{}],
+            slices: [{color: '#00cab1'},{% for row in sortedpie2 %}{color: '{{row.3 |safe}}'},{% endfor %}{}],
             is3D: 'true'
         };
         var options2 = {
