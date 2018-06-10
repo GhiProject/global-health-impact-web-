@@ -2,6 +2,7 @@ import sqlite3
 import pandas as pd
 
 conn = sqlite3.connect('ghi.db')
+conn.text_factory = lambda x:unicode(x, 'utf-8', 'ignore') #use unicode strings instead of 8-bit strings
 
 
 conn.execute('''DROP TABLE IF EXISTS diseaseall2010''')
@@ -20,7 +21,7 @@ conn.execute('''CREATE TABLE diseaseall2015
 
 def stripdata(x,y):
     tmp = df.iloc[x,y]
-    print(tmp)
+    #print(tmp)
     if isinstance(tmp,float) == False:
         tmp = tmp.replace(',','').replace(' ','').replace('-','').replace(' ','0')
         if tmp == "":
@@ -34,7 +35,7 @@ def stripdata(x,y):
 
 def stripdata3(x,y):
     tmp = df_2010B_2015.iloc[x,y]
-    print(tmp)
+    #print(tmp)
     if isinstance(tmp,float) == False:
         tmp = tmp.replace(',','').replace(' ','').replace('-','').replace(' ','0')
         if tmp == "":
@@ -82,8 +83,9 @@ for i in range(1,216):
     row = [country,tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
     data2013.append(row)
 
-print(data2013)
+#print(data2010)
 for row in data2010:
+    print(row)
     conn.execute(' insert into diseaseall2010 values (?,?,?,?,?,?,?,?,?,?) ', (row))
 
 for row in data2013:
