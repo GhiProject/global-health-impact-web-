@@ -43,7 +43,7 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
-     return sqlite3.connect('F:/global-health-impact-web/ghi.db')
+     return sqlite3.connect('ghi.db')
 
 @app.before_request
 def before_request():
@@ -88,7 +88,13 @@ def diseaseinx():
     data = cur.fetchall()
     ddisease = 'All'
     dyear = '2010'
+
+    print("Printing row")
+
     for row in data:
+
+        print(row)
+
         country = row[0]
         tb = row[1]
         malaria = row[2]
@@ -100,10 +106,12 @@ def diseaseinx():
         onchocerciasis = row[8]
         lf = row[9]
         total = tb+malaria+hiv+roundworm+hookworm+whipworm+schistosomiasis+onchocerciasis+lf
-        xx = [country,total]
-        xy = [country,tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
+        xx = [str(country),total]
+        xy = [str(country),tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
+
         piedat.append(xx)
         clickdat.append(xy)
+
     seq = sorted(piedat, key=lambda sc: sc[1], reverse=True)
     index = [seq.index(v) for v in piedat]
     piedat.insert(0,['Country','DALY'])
@@ -263,7 +271,9 @@ def diseasepg(dyear, ddisease):
             cur = g.db.execute(
                 ' select country, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf from diseaseall2010 ')
             data = cur.fetchall()
+            print("In diseases all")
             for row in data:
+                print(row)
                 country = row[0]
                 tb = row[1]
                 malaria = row[2]
@@ -275,8 +285,8 @@ def diseasepg(dyear, ddisease):
                 onchocerciasis = row[8]
                 lf = row[9]
                 total = tb + malaria + hiv + roundworm + hookworm + whipworm + schistosomiasis + onchocerciasis + lf
-                xx = [country, total]
-                xy = [country, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf]
+                xx = [str(country), total]
+                xy = [str(country), tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf]
                 piedat.append(xx)
                 clickdat.append(xy)
                 seq = sorted(piedat, key=lambda sc: sc[1], reverse=True)
@@ -478,8 +488,8 @@ def diseasepg(dyear, ddisease):
                 onchocerciasis = row[8]
                 lf = row[9]
                 total = tb + malaria + hiv + roundworm + hookworm + whipworm + schistosomiasis + onchocerciasis + lf
-                xx = [country, total]
-                xy = [country, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf]
+                xx = [str(country), total]
+                xy = [str(country), tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf]
                 piedat.append(xx)
                 clickdat.append(xy)
             seq = sorted(piedat, key=lambda sc: sc[1], reverse=True)
@@ -681,8 +691,8 @@ def diseasepg(dyear, ddisease):
                 onchocerciasis = row[8]
                 lf = row[9]
                 total = tb + malaria + hiv + roundworm + hookworm + whipworm + schistosomiasis + onchocerciasis + lf
-                xx = [country, total]
-                xy = [country, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf]
+                xx = [str(country), total]
+                xy = [str(country), tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchocerciasis, lf]
                 piedat.append(xx)
                 clickdat.append(xy)
             seq = sorted(piedat, key=lambda sc: sc[1], reverse=True)
