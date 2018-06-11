@@ -1,8 +1,19 @@
 import sqlite3
 import pandas as pd
+import unicodedata
+
+
+#Helper function to remap accented characters to unaccented utf-8 form
+def strip_accents(text):
+    text = unicode(text, 'utf-8')
+    text = unicodedata.normalize('NFD', text)
+    text = text.encode('ascii', 'ignore')
+    text = text.decode("utf-8")
+    return str(text)
+
 
 conn = sqlite3.connect('ghi.db')
-conn.text_factory = lambda x:unicode(x, 'utf-8', 'ignore') #use unicode strings instead of 8-bit strings
+#conn.text_factory = lambda x:unicode(x, 'utf-8', 'ignore') #use unicode strings instead of 8-bit strings
 
 
 conn.execute('''DROP TABLE IF EXISTS diseaseall2010''')
@@ -83,12 +94,12 @@ for i in range(1,216):
     row = [country,tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
     data2013.append(row)
 
-#print(data2010)
 for row in data2010:
-    print(row)
+    row[0] = strip_accents(row[0])
     conn.execute(' insert into diseaseall2010 values (?,?,?,?,?,?,?,?,?,?) ', (row))
 
 for row in data2013:
+    row[0] = strip_accents(row[0])
     conn.execute(' insert into diseaseall2013 values (?,?,?,?,?,?,?,?,?,?) ', (row))
 
 data2010B = []
@@ -107,9 +118,9 @@ for i in range(1,217):
     row2015 = [country,tb,malaria,hiv,roundworm,hookworm,whipworm,schistosomiasis,onchocerciasis,lf]
     data2015.append(row2015)
 
-print(data2015)
 
 for _row2015 in data2015:
+    _row2015[0] = strip_accents(_row2015[0])
     conn.execute(' insert into diseaseall2015 values (?,?,?,?,?,?,?,?,?,?) ', (_row2015))
 
 
