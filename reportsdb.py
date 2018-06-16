@@ -9,10 +9,10 @@ conn.execute('''DROP TABLE IF EXISTS reports2013''')
 conn.execute('''DROP TABLE IF EXISTS reportsdata2013''')
 
 conn.execute(
-    ''' CREATE TABLE reports2010 (year, company name, total impact score, rank overall, number of diseases) ''')
+    ''' CREATE TABLE reports2010 (id, year, company name, total impact score, rank overall, number of diseases) ''')
 
 conn.execute(
-    ''' CREATE TABLE reportsdetail2010 (year, company name, drug, disease target, individual impact) ''')
+    ''' CREATE TABLE reportsdetail2010 (id, year, company name, drug, disease target, individual impact) ''')
 
 
 conn.execute(
@@ -40,7 +40,7 @@ reportsdetail2010 = []
 reports2013 = []
 reportsdata2013 = []
 
-
+id = 0;
 for k in range(0, 44):
     if is_df_true.iloc[k, 1] == True:
         companyname = df.iloc[k, 1]
@@ -55,19 +55,22 @@ for k in range(0, 44):
         numOfDisease = cleanfloat(df.iloc[k, 4])
         print(numOfDisease)
     if is_df_true.iloc[k, 1] == True and is_df_true.iloc[k, 2] == True and  is_df_true.iloc[k, 3] == True and  is_df_true.iloc[k, 4] == True:
-        row = [2010, companyname, totalimpactscore, companyrank, numOfDisease]
+        id = id+1
+        row = [id, 2010, companyname, totalimpactscore, companyrank, numOfDisease]
         reports2010.append(row)
 
 for item in reports2010:
     print(item)
-    conn.execute(' insert into reports2010 values (?,?,?,?,?) ', item)
+    conn.execute(' insert into reports2010 values (?,?,?,?,?,?) ', item)
 
+_id = 0;
 tempcompanyname = ""
 for k in range(0, 44):
     companyname = df.iloc[k,1]
     if is_df_true.iloc[k, 1] == False:
         companyname = tempcompanyname
     else:
+        _id = _id + 1;
         tempcompanyname = companyname
     print(tempcompanyname)
     print(companyname)
@@ -75,14 +78,14 @@ for k in range(0, 44):
     print(drug)
     diseaseTargeted = df.iloc[k, 6]
     print(diseaseTargeted)
-    individualImpactScore = df.iloc[k, 7]
+    individualImpactScore = cleanfloat(df.iloc[k, 7])
     print(individualImpactScore)
-    rowdata = [2010, companyname, drug, diseaseTargeted, individualImpactScore]
+    rowdata = [_id, 2010, companyname, drug, diseaseTargeted, individualImpactScore]
     reportsdetail2010.append(rowdata)
 
 for item in reportsdetail2010:
     print(item)
-    conn.execute(' insert into reportsdetail2010 values (?,?,?,?,?) ', item)
+    conn.execute(' insert into reportsdetail2010 values (?,?,?,?,?,?) ', item)
 
 
 

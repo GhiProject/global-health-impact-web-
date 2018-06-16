@@ -17,6 +17,9 @@
         <div class="contentbox">
             <p class="redtxt"  style="font-size:42px;font-weight:bold">REPORTS</p>
         </div>
+         <div class="contentbox">
+            <p class="redtxt"  style="font-size:30px;font-weight:bold">PICK A COMPANY</p>
+        </div>
     </div>
 
 </div>
@@ -24,18 +27,60 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 
-    var companyname = {{report2010 | safe}}
-    row = companyname[1];
+    var colorval;
+
+
+    function getColor(colorvalue)
+    {
+      if(colorvalue.includes("Malaria"))
+      {
+        colorval = "#0083CA";
+      }
+      else if(colorvalue.includes("TB"))
+      {
+        colorval = "#FFB31C";
+      }
+      else if(colorvalue.includes("HIV"))
+      {
+        colorval = "#EF3E2E";
+      }
+      else if(colorvalue.includes("Roundworm"))
+      {
+        colorval = "#003452";
+      }
+      else if(colorvalue.includes("Hookworm"))
+      {
+        colorval = "#86AAB9";
+      }
+      else if(colorvalue.includes("Whipworm"))
+      {
+        colorval = "#CAEEFD";
+      }
+      else if(colorvalue.includes("Schistosomiasis"))
+      {
+        colorval = "#546675";
+      }
+      else
+      {
+        colorval = "#5CB85C";
+      }
+    }
+
+    var reportsdata = {{report2010 | safe}}
+
+    var reportdetail = {{reportdetail2010 | safe }}
+
     google.charts.load('upcoming', {'packages':['geochart','corechart']});
     google.charts.setOnLoadCallback(drawMap);
     function drawMap() {
-      row = companyname[1];
+      row = reportdetail[0];
+      rowvalue = reportsdata[0];
+      getColor(row[4]);
       var bardata = new google.visualization.DataTable();
-      bardata.addColumn('string','Country');
-      bardata.addColumn('number','Score');
+      bardata.addColumn('string','Disease');
+      bardata.addColumn('number','Impact');
       bardata.addColumn({type: 'string', role: 'style'});
-      bardata.addRow(['TB',row[2],"color: #FFB31C"]);
-      bardata.addRow(['Malaria',row[3],"color: #0083CA"]);
+      bardata.addRow([row[4],row[5],"color: colorval"]);
        var baroptions = {
              legend:'none',
              top: 0,
@@ -49,19 +94,117 @@
          };
       var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
       barchart.draw(bardata,baroptions);
-      document.getElementById('cntname').innerHTML = row[0];
+      document.getElementById('rptScore').innerHTML = rowvalue[3];
+      document.getElementById('rptDrug').innerHTML = row[3];
+      document.getElementById('rptDisease').innerHTML = row[4];
+      console.log(rowvalue[2]);
+      document.getElementById('cntname').innerHTML = rowvalue[2];
     }
 
+    function rptClick(rownum){
+          document.getElementById('rptDrug').innerHTML = "";
+          document.getElementById('rptDisease').innerHTML = "";
+           // alert("Inside"+ rownum);
+            var ii = 0;
+            var j;
+             var count = Object.keys(reportdetail).length;
+             console.log(count);
+             var bardata = new google.visualization.DataTable();
+             bardata.addColumn('string','Disease');
+             bardata.addColumn('number','Impact');
+             bardata.addColumn({type: 'string', role: 'style'});
+             for(ii = 0; ii < count; ii++)
+             {
+                    console.log(reportdetail[ii][0])
+                    if(rownum == reportdetail[ii][0])
+                    {
+                    row = reportdetail[ii];
+                    rowvalue = reportsdata[rownum-1];
+                    console.log(row[4]);
+                    console.log(row[5]);
+                    getColor(row[4]);
+                     bardata.addRow([row[4],row[5],colorval]);
+                    document.getElementById('rptDrug').innerHTML += " " + row[3];
+                    document.getElementById('rptDisease').innerHTML += " " + row[4];
+                    }
+             }
+               var baroptions = {
+                    legend:'none',
+                    top: 0,
+                    width: 400,
+                    animation:{
+                        startup: true,
+                        duration: 1000,
+                        easing: 'out',
+                    }
+                };
+            var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
+            barchart.draw(bardata,baroptions);
+            document.getElementById('rptScore').innerHTML = rowvalue[3];
+            document.getElementById('cntname').innerHTML = rowvalue[2];
+        };
 </script>
 
 
 <div class="row">
 <div  class="col-sm-6">
-        <p class="bluetxt text-center" id="cntname"></p>
+
+     {% for rpt in report2010 %}
+            <a onclick="rptClick({{rpt.0}})">
+                <div style="padding-top: 1px; font-family: 'Nunito','sans-serif';">{{ rpt.2 }}</div>
+            </a>
+        {% endfor %}
 </div>
+    <div class="col-sm-6">
+
+        <p class="redtxt" id="cntname" style="font-size:20px"></p>
+        <div style="width:250px;">
+         <div style="width:50px; float:left;"><b> Score :</b> </div>
+         <div style="width:200px; float:right;" id="rptScore"></div>
+        </div><br>
+         <div  style="width:250px;">
+         <div style="width:50px; float:left;"><b> Drug :</b> </div>
+         <div style="width:200px; float:right;" id="rptDrug"></div>
+        </div><br>
+         <div  style="width:270px;">
+         <div style="width:70px; float:left;"><b> Disease : </b> </div>
+         <div style="width:200px; float:right;" id="rptDisease"></div>
+        </div>
+    </div>
     <div class="col-sm-6">
          <div class="rgtpos" id="horbars" ></div>
     </div>
 </div>
-
+<div class="row">
+    <div class="col-sm-6">
+ <div class="contentbox">
+            <p class="redtxt">SCORE EXPLANATION REPORT:</p>
+             <p class="txtcontent">Learn more about the companies and drugs. It also explains the score break-down for each company.</p>
+             <table id="reporttab">
+                <tr>
+                    <td id="paperthumb">
+                        <a href="http://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0141374&type=printable">
+                            <img src="static/img/ExtendingAccessThumb.jpg" width="100%"/>
+                        </a>
+                    </td>
+                    <td>
+                        <p class="abtlabel">Click on the paper to read more!</p>
+                    </td>
+                </tr>
+            </table>
+      <table id="reporttab">
+                <tr>
+                    <td id="paperthumb">
+                        <a href="http://global-health-impact.org/src/Company%20Ranking%20Only%20011615.pdf">
+                            <img src="static/img/ghi_ranking_explanation.jpg" width="100%"/>
+                        </a>
+                    </td>
+                    <td>
+                        <p class="abtlabel">Click on the paper to read more!</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}
