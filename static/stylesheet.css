@@ -3,6 +3,9 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
+
+
+
 ::-webkit-scrollbar {
     width: 12px;
 }
@@ -667,3 +670,4 @@ body {
     margin-right: 5px;
     margin-bottom: 5px;
 }
+

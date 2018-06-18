@@ -1,6 +1,35 @@
 
 {% extends "layout.html" %}
 {% block title %}
+<style type="text/css">
+
+  .row{
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .coll {
+    padding-left:20px;
+    padding-right:20px;
+  }
+  .companyname a{
+    
+    color:black;
+    text-decoration: none;
+}
+
+.companyname a:hover{
+    
+    color:red;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#company_head{
+  font-size: 25px;
+  color: #0083c4;
+  font-weight: 700;
+}
+</style>
 <title>Reports</title>
 {% endblock %}
 
@@ -94,11 +123,17 @@
          };
       var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
       barchart.draw(bardata,baroptions);
+      var content_data = row[2]+" is ranked in "+row[4]+" place in our index."+row[2]+"’s drugs have a total impact score of "+row[3]+". Of that score, <<disease1percent>>%, or <<disease1impact>>, comes from treating <<disease1>> and <<disease2percent>>%, or <<disease2impact>>, comes from treating <<disease2>>."+row[2]+" receives credit for <<numberofdrugsdisease1>> treatments against <<disease1>>, <<drug1disease1>> and <<drug2disease1>> [etc. if more than one exist]. These <<numberofdrugsdisease1>> <<disease1>> drugs are responsible for averting the loss of <<percentdalyscompanydisease1>> of the worldwide DALYs that we estimate would have been lost due to <<disease1>> in <<year>> in the absence of effective treatment [similarly for other diseases]. "+row[2]+"’s drug portfolio placed it <<companyrankdisease1>> in terms of total averted DALYs for <<disease1>>."+row[2]+" also receives credit for <<numberofdrugsdisease2>> <<disease2>> drugs, <<drug1disease2>> and <<drug2disease2>>. "+row[2]+"’s <<disease2>> drug portfolio helped to prevent <<percentdalyscompanydisease2>> of the DALYs that we estimate would have been lost to <<disease2>> in <<year>>. "+row[2]+"’s drug portfolio placed it <<companyrankdisease2>> in terms of total averted DALYs for <<disease2>>.<<drughighestscore>> for <<diseasehighestscore>> contributes the most to <<company>>’s score. Drug <<drughighestefficacy> has the <<rankefficacy>> greatest efficacy, <<ranktreatmentpercentage>> greatest treatment percentage and disease <<disease1>> accounts for <<percentofdesiseseburden>> percent of the global burden of disease that we estimate would be lost without treatment (out of all the diseases in our model).";
+
+        document.getElementById('company_head').innerHTML = row[2];
+            document.getElementById('cont').innerHTML = content_data;
       document.getElementById('rptScore').innerHTML = rowvalue[3];
       document.getElementById('rptDrug').innerHTML = row[3];
       document.getElementById('rptDisease').innerHTML = row[4];
+      document.getElementById(row[0]).style.color = "#0083c4";
+      document.getElementById(row[0]).style.fontWeight = "700"
       console.log(rowvalue[2]);
-      document.getElementById('cntname').innerHTML = rowvalue[2];
+      //document.getElementById('cntname').innerHTML = rowvalue[2];
     }
 
     function rptClick(rownum){
@@ -113,6 +148,7 @@
              bardata.addColumn('string','Disease');
              bardata.addColumn('number','Impact');
              bardata.addColumn({type: 'string', role: 'style'});
+             console.log("-----------------------------------------");
              for(ii = 0; ii < count; ii++)
              {
                     console.log(reportdetail[ii][0])
@@ -120,14 +156,23 @@
                     {
                     row = reportdetail[ii];
                     rowvalue = reportsdata[rownum-1];
-                    console.log(row[4]);
-                    console.log(row[5]);
+                    console.log("This is the Drug : "+row[3]);
+                    console.log("This is the disease : "+row[4]);
+                    console.log("This is the impact score : "+row[5]);
                     getColor(row[4]);
                      bardata.addRow([row[4],row[5],colorval]);
                     document.getElementById('rptDrug').innerHTML += " " + row[3];
                     document.getElementById('rptDisease').innerHTML += " " + row[4];
+                    document.getElementById(reportdetail[ii][0]).style.color = "#0083c4";
+                    document.getElementById(reportdetail[ii][0]).style.fontWeight = "700"
+                    }
+                    else
+                    {
+                      document.getElementById(reportdetail[ii][0]).style.color = "#000000";
+                      document.getElementById(reportdetail[ii][0]).style.fontWeight = "400"
                     }
              }
+             console.log("-----------------------------------------");
                var baroptions = {
                     legend:'none',
                     top: 0,
@@ -140,24 +185,43 @@
                 };
             var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
             barchart.draw(bardata,baroptions);
+            var content_data = row[2]+" is ranked in "+row[4]+" place in our index."+row[2]+"’s drugs have a total impact score of "+row[3]+". Of that score, <<disease1percent>>%, or <<disease1impact>>, comes from treating <<disease1>> and <<disease2percent>>%, or <<disease2impact>>, comes from treating <<disease2>>."+row[2]+" receives credit for <<numberofdrugsdisease1>> treatments against <<disease1>>, <<drug1disease1>> and <<drug2disease1>> [etc. if more than one exist]. These <<numberofdrugsdisease1>> <<disease1>> drugs are responsible for averting the loss of <<percentdalyscompanydisease1>> of the worldwide DALYs that we estimate would have been lost due to <<disease1>> in <<year>> in the absence of effective treatment [similarly for other diseases]. "+row[2]+"’s drug portfolio placed it <<companyrankdisease1>> in terms of total averted DALYs for <<disease1>>."+row[2]+" also receives credit for <<numberofdrugsdisease2>> <<disease2>> drugs, <<drug1disease2>> and <<drug2disease2>>. "+row[2]+"’s <<disease2>> drug portfolio helped to prevent <<percentdalyscompanydisease2>> of the DALYs that we estimate would have been lost to <<disease2>> in <<year>>. "+row[2]+"’s drug portfolio placed it <<companyrankdisease2>> in terms of total averted DALYs for <<disease2>>.<<drughighestscore>> for <<diseasehighestscore>> contributes the most to <<company>>’s score. Drug <<drughighestefficacy> has the <<rankefficacy>> greatest efficacy, <<ranktreatmentpercentage>> greatest treatment percentage and disease <<disease1>> accounts for <<percentofdesiseseburden>> percent of the global burden of disease that we estimate would be lost without treatment (out of all the diseases in our model).";
+
+            document.getElementById('company_head').innerHTML = row[2];
+            document.getElementById('cont').innerHTML = content_data;
             document.getElementById('rptScore').innerHTML = rowvalue[3];
-            document.getElementById('cntname').innerHTML = rowvalue[2];
+            //document.getElementById('cntname').innerHTML = rowvalue[2];
+            
         };
 </script>
 
 
 <div class="row">
-<div  class="col-sm-6">
+<!-- List of companies -->
+  <div  class="col-sm-6">
+    {% for rpt in report2010 %}
+    <div class="coll companyname" style="padding-top: 1px; font-family: 'Nunito','sans-serif';" >
+      <a id="{{rpt.0}}" onclick="rptClick({{rpt.0}})">
+        {{ rpt[2] }}
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>br>
+<!--End list of company-->
+<!--Company details with bar graph and paragraph-->    
+  <div class="col-sm-6">
+  <!--Company Name-->
+    <div class="coll" id="company_head"> </div>
+  <!--End Company Name-->
+    </br>
 
-     {% for rpt in report2010 %}
-            <a onclick="rptClick({{rpt.0}})">
-                <div style="padding-top: 1px; font-family: 'Nunito','sans-serif';">{{ rpt.2 }}</div>
-            </a>
-        {% endfor %}
-</div>
-    <div class="col-sm-6">
+  <!--Paragraph about company -->  
+    <div class="coll" id="cont"></div>  
+  <!--End Paragraph about company-->
 
-        <p class="redtxt" id="cntname" style="font-size:20px"></p>
+  <!--Score details --> 
+  <div class="coll">    
         <div style="width:250px;">
          <div style="width:50px; float:left;"><b> Score :</b> </div>
          <div style="width:200px; float:right;" id="rptScore"></div>
@@ -170,11 +234,18 @@
          <div style="width:70px; float:left;"><b> Disease : </b> </div>
          <div style="width:200px; float:right;" id="rptDisease"></div>
         </div>
-    </div>
-    <div class="col-sm-6">
+  </div>
+  <!--End score details-->      
+    
+
+    </br></br>
+    <!-- Bar Graph -->  
          <div class="rgtpos" id="horbars" ></div>
-    </div>
+    <!-- End bar graph -->  
+    
 </div>
+</div>
+
 <div class="row">
     <div class="col-sm-6">
  <div class="contentbox">

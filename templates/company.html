@@ -1,5 +1,61 @@
 {% extends "layout.html" %}
 {% block title %}
+<style type="text/css">
+ [data-balloon] {
+  position: relative;
+  cursor: pointer; }
+
+  [data-balloon]:after {
+    filter: alpha(opacity=0);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-transition: all 0.18s ease-out 0.18s;
+    -moz-transition: all 0.18s ease-out 0.18s;
+    -ms-transition: all 0.18s ease-out 0.18s;
+    -o-transition: all 0.18s ease-out 0.18s;
+    transition: all 0.18s ease-out 0.18s;
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    text-shadow: none !important;
+    font-size: 12px !important;
+    background: rgba(17, 17, 17, 0.9);
+    border-radius: 4px;
+    color: #fff;
+    content: attr(data-balloon);
+    padding: .5em 1em;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 10; }
+
+  [data-balloon]:hover:before, [data-balloon]:hover:after, [data-balloon][data-balloon-visible]:before, [data-balloon][data-balloon-visible]:after {
+    filter: alpha(opacity=100);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+    pointer-events: auto; }
+
+    [data-balloon][data-balloon-pos='right']:after {
+    left: 100%;
+    margin-left: 11px;
+    top: 50%;
+    -webkit-transform: translate(-10px, -50%);
+    -moz-transform: translate(-10px, -50%);
+    -ms-transform: translate(-10px, -50%);
+    transform: translate(-10px, -50%); }
+
+  [data-balloon][data-balloon-pos='right']:hover:after, [data-balloon][data-balloon-pos='right'][data-balloon-visible]:after {
+    -webkit-transform: translate(0, -50%);
+    -moz-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%); }
+
+
+</style>
 <title>{% if comptype == 0 %}Manufacturer{% endif %}{% if comptype == 1 %}Patent Holder{% endif %} Index - Global Health Impact</title>
 
 {% endblock %}
@@ -83,7 +139,7 @@
             <div id="chart_div">
                 {% for row in bardata %}
                 <a onclick="">
-                    <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';">{{ row.0 }}</div>
+                    <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';"><a data-balloon="{{ row.1}}" data-balloon-pos="right">{{ row.0 }}</a></div>
                     <div style="width: {{ row.1 }}%;background-color:{{ row.3 }};height: 10px;display:inline-block;font-size:0;margin-right:-4px;"></div>
                 </a>
                 {% endfor %}
