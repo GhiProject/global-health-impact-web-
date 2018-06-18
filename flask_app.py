@@ -1078,6 +1078,7 @@ def country():
     print("printing sort")
     print(sort)
     g.db.close()
+    print(sortedlist)
     return render_template('country.html', showindex=1, navsub=1, name=name, color=color, mapdata=mapdata, sortedlist=sortedlist, sortedval = sort, year=year, isall=isall, barlist = barlist, speclocate = speclocate)
 
 @app.route('/index/country/<xyear>/<xdisease>')
