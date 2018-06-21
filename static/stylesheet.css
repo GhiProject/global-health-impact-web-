@@ -8,6 +8,7 @@ body {
 
 ::-webkit-scrollbar {
     width: 12px;
+    height: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -516,7 +517,7 @@ body {
     max-height:80px;
     overflow-y:scroll;
     position: relative;
-    overflow-x:hidden;
+    overflow-x:scroll;
     z-index:9999;
 }
 #chart_div {

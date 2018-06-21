@@ -117,12 +117,21 @@
                 <table style="margin:auto;white-space: nowrap;">
                     {% for row in pielab1 %}
                     <tr style="float:center">
-                        <td class="tablecell"><div class="colorbox" style="background-color:#{{ row.2 |safe }};"></div></td>
+                        <td class="tablecell">
+                            <div class="colorbox" style="background-color:#{{ row.2 |safe }};"></div>
+                        </td>
                         <td class="tablecell legendtxt" title="{{ row.0 |safe }}">{{ row.1 |safe }}</td>
-                        <td class="tablecell leftcell"><div class="colorbox" style="background-color:#{{ row.5 |safe }};"></div></td>
+
+                        <td class="tablecell leftcell">
+                            <div class="colorbox" style="background-color:#{{ row.5 |safe }};"></div>
+                        </td>
                         <td class="tablecell legendtxt" title="{{ row.3 |safe }}">{{ row.4 |safe }}</td>
-                        <td class="tablecell leftcell"><div class="colorbox" style="background-color:#{{ row.8 |safe }};"></div></td>
+                        
+                        <td class="tablecell leftcell">
+                            <div class="colorbox" style="background-color:#{{ row.8 |safe }};"></div>
+                        </td>
                         <td class="tablecell legendtxt" title="{{ row.6 |safe }}">{{ row.7 |safe }}</td>
+                        
                         <td class="tablecell leftcell"><div class="colorbox" style="background-color:#{{ row.11 |safe }};"></div></td>
                         <td class="tablecell legendtxt" title="{{ row.9 |safe }}">{{ row.10 |safe }}</td>
                     </tr>

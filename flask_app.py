@@ -1078,7 +1078,7 @@ def country():
     print("printing sort")
     print(sort)
     g.db.close()
-    print(sortedlist)
+
     return render_template('country.html', showindex=1, navsub=1, name=name, color=color, mapdata=mapdata, sortedlist=sortedlist, sortedval = sort, year=year, isall=isall, barlist = barlist, speclocate = speclocate)
 
 @app.route('/index/country/<xyear>/<xdisease>')
@@ -1350,9 +1350,9 @@ def company():
         print(k)
         if n < 4:
             comp = k[0]
-            shortcomp = comp[0:10]
+            
             temprow.append(comp)
-            temprow.append(shortcomp)
+            temprow.append(comp)
             scolor=k[2]
             sscolor=scolor[1:7]
             temprow.append(sscolor)
@@ -1368,9 +1368,9 @@ def company():
         print(k)
         if n < 4:
             comp = k[0]
-            shortcomp = comp[0:10]
+            
             temprow.append(comp)
-            temprow.append(shortcomp)
+            temprow.append(comp)
             scolor=k[2]
             sscolor=scolor[1:7]
             temprow.append(sscolor)
@@ -1461,9 +1461,9 @@ def companyindx(year,disease):
                 print(k)
                 if n < 4:
                     comp = k[0]
-                    shortcomp = comp[0:10]
+                    
                     temprow.append(comp)
-                    temprow.append(shortcomp)
+                    temprow.append(comp)
                     scolor = k[2]
                     sscolor = scolor[1:7]
                     temprow.append(sscolor)
@@ -1478,9 +1478,9 @@ def companyindx(year,disease):
                 print(k)
                 if n < 4:
                     comp = k[0]
-                    shortcomp = comp[0:10]
+                    
                     temprow.append(comp)
-                    temprow.append(shortcomp)
+                    temprow.append(comp)
                     scolor = k[2]
                     sscolor = scolor[1:7]
                     temprow.append(sscolor)
@@ -1621,9 +1621,9 @@ def companyindx(year,disease):
         print(k)
         if n < 4:
             comp = k[0]
-            shortcomp = comp[0:10]
+            
             temprow.append(comp)
-            temprow.append(shortcomp)
+            temprow.append(comp)
             scolor=k[2]
             sscolor=scolor[1:7]
             temprow.append(sscolor)
@@ -1642,9 +1642,9 @@ def companyindx(year,disease):
         print(k)
         if n < 4:
             comp = k[0]
-            shortcomp = comp[0:10]
+            
             temprow.append(comp)
-            temprow.append(shortcomp)
+            temprow.append(comp)
             scolor=k[2]
             sscolor=scolor[1:7]
             temprow.append(sscolor)
@@ -1791,9 +1791,9 @@ def patent(year,disease):
         comp = k[0]
         score = k[1]
         color = "#"+k[2]
-        shortcomp = comp[0:10]
+        
         labit.append(comp)
-        labit.append(shortcomp)
+        labit.append(comp)
         labit.append(color)
         labit.append(score)
         lablist1.append(labit)
@@ -1816,9 +1816,9 @@ def patent(year,disease):
         comp = k[0]
         score = k[1]
         color = "#"+k[2]
-        shortcomp = comp[0:10]
+        
         labit.append(comp)
-        labit.append(shortcomp)
+        labit.append(comp)
         labit.append(color)
         labit.append(score)
         lablist2.append(labit)
