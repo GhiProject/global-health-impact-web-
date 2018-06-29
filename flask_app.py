@@ -42,7 +42,9 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
+
      return sqlite3.connect('C:\my work\GHI\global-health-impact-web-\ghi.db')
+
 
 @app.before_request
 def before_request():
@@ -1836,461 +1838,815 @@ def patent(year,disease):
                 xx = 0
     return render_template('company.html', navsub=2, showindex=1, comptype = 1, speclocate = speclocate, scrolling=1, patent1 = patent1, patent2 = patent2, pielabb1 = pielabb1, pielabb2 = pielabb2)
 
+@app.route('/account')
+def account():
+    return render_template('account.html', showthediv=0)
 
-@app.route('/dbupdate')
-def dbupdate():
-    print("inside dbupdate")
-    return render_template('updatedb.html', scrolling=2)
+@app.route('/revert')
+def revert():
+    print("in revert")
+    conn = connect_db();
 
+    conn.execute('''delete from manudis''')
 
-def cleanfloat(var):
-        if var == '#REF!':
-            var = 0
-        if var == '#DIV/0!':
-            var = 0
-        if type(var) != float and type(var) != int:
-            var = float(var.replace(',','').replace('%',''))
-        if var != var:
-            var = 0
-        return var
+    conn.execute('''insert into manudis select * from manudis_bkp''')
 
-@app.route('/db/drug/refresh')
-@requires_auth
-def drugdbref():
-    print("inside drugdbref")
-    conn = sqlite3.connect('ghi.db')
-    conn.execute('''DROP TABLE IF EXISTS drugr2010''')
-    conn.execute('''DROP TABLE IF EXISTS drugr2013''')
-    conn.execute('''CREATE TABLE drugr2010
-                (drug text, company text, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, onchocerciasis real, lf real, total real)''')
-    conn.execute('''CREATE TABLE drugr2013
-                (drug text, company text, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, onchocerciasis real, lf real, total real)''')
+    conn.execute('''delete from manudis2015''')
 
-    datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1560508440&single=true&output=csv'
-    df = pd.read_csv(datasrc, skiprows=1)
-    drugdata = []
-    drugrdata = []
-    drug2010 = []
-    drug2013 = []
-    perc2010 = []
+    conn.execute('''insert into manudis2015 select * from manudis2015_bkp''')
 
-    for i in range(1,43):
-        drugr = []
-        name = df.iloc[4,i]
-        drugr.append(name)
-        company = df.iloc[1,i]
-        drugr.append(company)
-        for j in range(10,20):
-            if j == 10:
-                tb1 = cleanfloat(df.iloc[7,i])
-                tb2 = cleanfloat(df.iloc[8,i])
-                tb3 = cleanfloat(df.iloc[9,i])
-                tb=[tb1,tb2,tb3]
-                temp = (tb1+tb2+tb3)
-                drugr.append(temp)
-            elif j == 11:
-                mal1 = cleanfloat(df.iloc[10,i])
-                mal2 = cleanfloat(df.iloc[11,i])
-                mal=[mal1,mal2]
-                temp = (mal1+mal2)
-                drugr.append(temp)
-            elif j == 19:
-                total = cleanfloat(df.iloc[j,i])
-                zz = [name,total]
-                perc2010.append(zz)
-            else:
-                temp = df.iloc[j,i]
-                if isinstance(temp,float) == False and isinstance(temp,int) == False:
-                    temp = float(temp.replace(',',''))
-                if temp != temp:
-                    temp = 0
-                drugr.append(temp)
-            if temp > 0:
-                if j == 10:
-                    disease = 'TB'
-                    color = 'FFB31C'
-                elif j == 11 or j == 12:
-                    disease = 'Malaria'
-                    color = '0083CA'
-                elif j == 13:
-                    disease = 'HIV'
-                    color = 'EF3E2E'
-                elif j == 14:
-                    disease = 'Roundworm'
-                    color = '003452'
-                elif j == 15:
-                    disease = 'Hookworm'
-                    color = '86AAB9'
-                elif j == 16:
-                    disease = 'Whipworm'
-                    color = 'CAEEFD'
-                elif j == 17:
-                    disease = 'Schistosomiasis'
-                    color = '546675'
-                elif j == 18:
-                    disease = 'Onchocerasis'
-                    color = '8A5575'
-                elif j == 19:
-                    disease = 'LF'
-                    color = '305516'
-                company = df.iloc[1,i]
-                drugrow = [name, company, disease, temp, color]
-                drug2010.append(drugrow)
+    conn.execute('''delete from manutot''')
 
+    conn.execute('''insert into manutot select * from manutot_bkp''')
 
+    conn.execute('''delete from manutot2015''')
 
-        if isinstance(df.iloc[20,i],float) == False:
-            score = float(df.iloc[20,i].replace(',',''))
-        else:
-            score = df.iloc[20,i]
-        row = [name,score]
-        drugdata.append(row)
-        drugrdata.append(drugr)
+    conn.execute('''insert into manutot2015 select * from manutot2015_bkp''')
 
-    unmet = ['Unmet Need','Unmet Need']
-    unmetsum = 0
-    for xx in [[7,8,9],[10,11],[12],[13],[14],[15],[16],[17],[18]]:
-        val = 0
-        for yy in xx:
-            t = df.iloc[yy,45]
-            if isinstance(t,float) == False and isinstance(t,int) == False:
-                t = float(t.replace(',',''))
-            if t != t:
-                t = 0
-            val += t
-        unmet.append(val)
-        unmetsum += val
-    print(unmet)
-    print(drugrdata[0])
-    drugrdata.append(unmet)
+    conn.execute('''delete from countrybydis2010''')
 
-    for row in drugrdata:
-        tot = sum(row[2:])
-        row.append(tot)
-        conn.execute('insert into drugr2010 values (?,?,?,?,?,?,?,?,?,?,?,?)', row)
+    conn.execute('''insert into countrybydis2010 select * from countrybydis2010_bkp''')
 
-    drugdata = []
-    drugrdata = []
-    perc2013 = []
-    for i in range(50,91):
-        drugr = []
-        name = df.iloc[4,i]
-        drugr.append(name)
-        company = df.iloc[1,i]
-        drugr.append(company)
-        for j in range(10,20):
-            if j == 10:
-                tb1 = cleanfloat(df.iloc[7,i])
-                tb2 = cleanfloat(df.iloc[8,i])
-                tb3 = cleanfloat(df.iloc[9,i])
-                tb=[tb1,tb2,tb3]
-                temp = (tb1+tb2+tb3)
-                drugr.append(temp)
-            elif j == 11:
-                mal1 = cleanfloat(df.iloc[10,i])
-                mal2 = cleanfloat(df.iloc[11,i])
-                mal=[mal1,mal2]
-                temp = (mal1+mal2)
-                drugr.append(temp)
-            elif j == 19:
-                total = cleanfloat(df.iloc[j,i])
-                zz = [name,total]
-                perc2013.append(zz)
-            else:
-                temp = df.iloc[j,i]
-                if isinstance(temp,float) == False and isinstance(temp,int) == False:
-                    temp = float(temp.replace(',',''))
-                if temp != temp:
-                    temp = 0
-                drugr.append(temp)
-            if temp > 0:
-                if j == 10:
-                    disease = 'TB'
-                    color = 'FFB31C'
-                elif j == 11 or j == 12:
-                    disease = 'Malaria'
-                    color = '0083CA'
-                elif j == 13:
-                    disease = 'HIV'
-                    color = 'EF3E2E'
-                elif j == 14:
-                    disease = 'Roundworm'
-                    color = '003452'
-                elif j == 15:
-                    disease = 'Hookworm'
-                    color = '86AAB9'
-                elif j == 16:
-                    disease = 'Whipworm'
-                    color = 'CAEEFD'
-                elif j == 17:
-                    disease = 'Schistosomiasis'
-                    color = '546675'
-                elif j == 18:
-                    disease = 'Onchocerasis'
-                    color = '8A5575'
-                elif j == 19:
-                    disease = 'LF'
-                    color = '305516'
-                company = df.iloc[1,i]
-                drugrow = [name, company, disease, temp, color]
-                drug2013.append(drugrow)
-        if isinstance(df.iloc[20,i],float) == False:
-            score = float(df.iloc[20,i].replace(',',''))
-        else:
-            score = df.iloc[20,i]
-        row = [name,score]
-        drugdata.append(row)
-        drugrdata.append(drugr)
+    conn.execute('''delete from countrybydis2013''')
 
-    unmet = ['Unmet Need','Unmet Need']
-    unmetsum = 0
-    for xx in [[7,8,9],[10,11],[12],[13],[14],[15],[16],[17],[18]]:
-        val = 0
-        for yy in xx:
-            t = df.iloc[yy,93]
-            if isinstance(t,float) == False and isinstance(t,int) == False:
-                t = float(t.replace(',',''))
-            if t != t:
-                t = 0
-            val += t
-        unmet.append(val)
-        unmetsum += val
-    drugrdata.append(unmet)
-    sortedlist = sorted(drug2013, key=lambda xy: xy[3], reverse=True)
+    conn.execute('''insert into countrybydis2013 select * from countrybydis2013_bkp''')
 
-    for row in drugrdata:
-        tot = sum(row[2:])
-        row.append(tot)
-        conn.execute('insert into drugr2013 values (?,?,?,?,?,?,?,?,?,?,?,?)', row)
-    perc2013.sort(key=lambda x: x[1], reverse=True)
-    conn.commit()
-    xx = conn.execute(' select * from drugr2010 ')
-    yy = conn.execute(' select * from drugr2013 ')
-    drug2010 = xx.fetchall()
-    drug2013 = yy.fetchall()
-    sheetdata = [[drug2010,list(map(lambda x: x[0], xx.description)),'Table: drug2010'],[drug2013,list(map(lambda x: x[0], yy.description)),'Table: drug2013']]
-    dbheader = ['Drug Tables','drug']
-    return render_template('dbviewer.html', sheetdata=sheetdata, scrolling=2, dbheader=dbheader)
+    conn.execute('''delete from country2010''')
 
-@app.route('/db/disease/refresh')
-@requires_auth
-def disdbref():
-    print("inside disdbref")
-    conn = sqlite3.connect('ghi.db')
-    conn.execute('''DROP TABLE IF EXISTS disease2010''')
-    conn.execute('''DROP TABLE IF EXISTS disease2013''')
-    conn.execute('''DROP TABLE IF EXISTS disbars''')
-    conn.execute('''CREATE TABLE disease2013
-                 (disease text, distype text, impact real, daly real, need text, color text)''')
+    conn.execute('''insert into country2010 select * from country2010_bkp''')
 
-    conn.execute('''CREATE TABLE disease2010
-                 (disease text, distype text, impact real, daly real, need text, color text)''')
+    conn.execute('''delete from country2013''')
 
-    conn.execute('''CREATE TABLE disbars
-                (disease text, color text, efficacy2010 real, efficacy2013 real, coverage2010 real, coverage2013 real, need2010 real, need2013 real)''')
+    conn.execute('''insert into country2013 select * from country2013_bkp''')
 
-    datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1560508440&single=true&output=csv'
-    df = pd.read_csv(datasrc, skiprows=1)
+    conn.execute('''delete from country2015''')
 
-    disease2010db = []
-    disease2013db = []
+    conn.execute('''insert into country2015 select * from country2015_bkp''')
 
-    i = 0
-    for k in range(7,19):
-        distypes = ['TB','TB','TB','Malaria','Malaria','HIV','Roundworm','Hookworm','Whipworm','Schistosomiasis','Onchoceriasis','LF']
-        colors = ['#FFB31C','#FFB31C','#FFB31C','#0083CA','#0083CA','#EF3E2E','#003452','#86AAB9','#CAEEFD','#546675','#8A5575','#305516']
-        dis = ['Drug Susceptable TB','MDR-TB','XDR-TB','p. falc Malaria','p. vivax Malaria','HIV','Roundworm','Hookworm','Whipworm','Schistosomiasis','Onchoceriasis','LF']
-        color = colors[i]
-        disease = dis[i]
-        distype = distypes[i]
-        impact = cleanfloat(df.iloc[k,43])
-        daly = cleanfloat(df.iloc[k,45])
-        need = cleanfloat(df.iloc[k,46])
-        i += 1
-        row = [disease,distype,impact,daly,need,color]
-        disease2010db.append(row)
-        conn.execute('insert into disease2010 values (?,?,?,?,?,?)', row)
+    conn.execute('''delete from countryp2010''')
 
-    i = 0
-    for k in range(7,19):
-        distypes = ['TB','TB','TB','Malaria','Malaria','HIV','Roundworm','Hookworm','Whipworm','Schistosomiasis','Onchoceriasis','LF']
-        colors = ['#FFB31C','#FFB31C','#FFB31C','#0083CA','#0083CA','#EF3E2E','#003452','#86AAB9','#CAEEFD','#546675','#8A5575','#305516']
-        dis = ['Drug Susceptable TB','MDR-TB','XDR-TB','p. falc Malaria','p. vivax Malaria','HIV','Roundworm','Hookworm','Whipworm','Schistosomiasis','Onchoceriasis','LF']
-        color = colors[i]
-        disease = dis[i]
-        distype = distypes[i]
-        impact = cleanfloat(df.iloc[k,92])
-        daly = cleanfloat(df.iloc[k,94])
-        need = cleanfloat(df.iloc[k,95])
-        i += 1
-        row = [disease,distype,impact,daly,need,color]
-        disease2013db.append(row)
-        conn.execute('insert into disease2013 values (?,?,?,?,?,?)', row)
+    conn.execute('''insert into countryp2010 select * from countryp2010_bkp''')
 
+    conn.execute('''delete from countryp2013''')
 
-    def stripdata(x,y):
-        tmp = df.iloc[x,y]
-        return cleanfloat(tmp)
+    conn.execute('''insert into countryp2013 select * from countryp2013_bkp''')
 
-    disbars = []
-    j=0
-    for k in range(90, 99):
-        colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
-                  '#546675', '#8A5575', '#305516']
-        diseasename = df.iloc[k,7]
-        color = colors[j]
-        efficacy2010 = cleanfloat(df.iloc[k,8])
-        efficacy2013 = cleanfloat(df.iloc[k,9])
-        coverage2010 = cleanfloat(df.iloc[k,10])
-        coverage2011 = cleanfloat(df.iloc[k,11])
-        need2010 = cleanfloat(df.iloc[k,12])
-        need2013 = cleanfloat(df.iloc[k,13])
-        roww = [diseasename,color,efficacy2010,efficacy2013,coverage2010,coverage2011,need2010,need2013]
-        print(roww)
-        disbars.append(roww)
-        j+=1
-        conn.execute('insert into disbars values (?,?,?,?,?,?,?,?)', roww)
+    conn.execute('''delete from countryp2015''')
+
+    conn.execute('''insert into countryp2015 select * from countryp2015_bkp''')
+
+    conn.execute('''delete from diseaseall2010''')
+
+    conn.execute('''insert into diseaseall2010 select * from diseaseall2010_bkp''')
+
+    conn.execute('''delete from diseaseall2013''')
+
+    conn.execute('''insert into diseaseall2013 select * from diseaseall2013_bkp''')
+
+    conn.execute('''delete from diseaseall2015''')
+
+    conn.execute('''insert into diseaseall2015 select * from diseaseall2015_bkp''')
+
+    conn.execute('''delete from disease2010''')
+
+    conn.execute('''insert into disease2010 select * from disease2010_bkp''')
+
+    conn.execute('''delete from disease2013''')
+
+    conn.execute('''insert into disease2013 select * from disease2013_bkp''')
+
+    conn.execute('''delete from disease2015''')
+
+    conn.execute('''insert into disease2015 select * from disease2015_bkp''')
+
+    conn.execute('''delete from disbars''')
+
+    conn.execute('''insert into disbars select * from disbars_bkp''')
+
+    conn.execute('''delete from distypes''')
+
+    conn.execute('''insert into distypes select * from distypes_bkp''')
+
+    conn.execute('''delete from disbars2010B2015''')
+
+    conn.execute('''insert into disbars2010B2015 select * from disbars2010B2015_bkp''')
+
+    conn.execute('''delete from distypes2010B2015''')
+
+    conn.execute('''insert into distypes2010B2015 select * from distypes2010B2015_bkp''')
+
+    conn.execute('''delete from drugr2010''')
+
+    conn.execute('''insert into drugr2010 select * from drugr2010_bkp''')
+
+    conn.execute('''delete from drugr2013''')
+
+    conn.execute('''insert into drugr2013 select * from drugr2013_bkp''')
+
+    conn.execute('''delete from drugr2015''')
+
+    conn.execute('''insert into drugr2015 select * from drugr2015_bkp''')
+
+    conn.execute('''delete from patent2010''')
+
+    conn.execute('''insert into patent2010 select * from patent2010_bkp''')
+
+    conn.execute('''delete from patent2013''')
+
+    conn.execute('''insert into patent2013 select * from patent2013_bkp''')
+
+    conn.execute('''delete from patent2015''')
+
+    conn.execute('''insert into patent2015 select * from patent2015_bkp''')
 
     conn.commit()
-    xx = conn.execute(' select * from disease2010 ')
-    yy = conn.execute(' select * from disease2013 ')
-    zz = conn.execute(' select * from disbars ')
-    disease2010 = xx.fetchall()
-    disease2013 = yy.fetchall()
-    disbars = zz.fetchall()
-    sheetdata = [[disease2010,list(map(lambda x: x[0], xx.description)),'Table: disease2010'],[disease2013,list(map(lambda x: x[0], yy.description)),'Table: disease2013'],[disbars,list(map(lambda x: x[0], zz.description)),'Table: disbars']]
-    dbheader = ['Drug Tables','drug']
-    return render_template('dbviewer.html', sheetdata=sheetdata, scrolling=2, dbheader=dbheader)
+    print("Database Backup Restored")
+    return render_template('revert.html', showthediv=0)
 
 
-@app.route('/dbupdate/<db>')
-def updateit(db):
-    print("inside updateitupdateitupdateit")
+
+@app.route('/accountS')
+def ManageAccount():
     conn = connect_db()
-    if db == 'company':
-        conn.execute('''DROP TABLE IF EXISTS manufacturer2010''')
-        conn.execute('''DROP TABLE IF EXISTS manufacturer2013''')
-        conn.execute('''DROP TABLE IF EXISTS manudis''')
-        conn.execute('''DROP TABLE IF EXISTS manutot''')
-        conn.execute('''CREATE TABLE manudis
-                     (company text, disease text, daly2010 real, daly2013 real, color text)''')
-        conn.execute('''CREATE TABLE manutot
-                     (company text, daly2010 real, daly2013 real, color text)''')
+    print("inside update")
+    try:
+        conn.execute('''DELETE FROM manudis_bkp''')
+        conn.execute('''DELETE FROM manutot_bkp''')
+        conn.execute('''DELETE FROM patent2010_bkp''')
+        conn.execute('''DELETE FROM patent2013_bkp''')
+        conn.execute('''DELETE FROM manudis2015_bkp''')
+        conn.execute('''DELETE FROM manutot2015_bkp''')
+        conn.execute('''DELETE FROM patent2015_bkp''')
+        conn.execute('''insert into manudis_bkp select * from manudis''')
+        conn.execute('''insert into manutot_bkp select * from manutot''')
+        conn.execute('''insert into patent2010_bkp select * from patent2010''')
+        conn.execute('''insert into patent2013_bkp select * from patent2013''')
+        conn.execute('''insert into manudis2015_bkp select * from manudis2015''')
+        conn.execute('''insert into manutot2015_bkp select * from manutot2015''')
+        conn.execute('''insert into patent2015_bkp select * from patent2015''')
+        # conn.execute('''DELETE FROM manufacturer2010''')
+        # conn.execute('''DELETE FROM manufacturer2013''')
+        conn.execute('''DELETE FROM manudis''')
+        conn.execute('''DELETE FROM manutot''')
+        conn.execute('''DELETE FROM patent2010''')
+        conn.execute('''DELETE FROM patent2013''')
+        conn.execute('''DELETE FROM manudis2015''')
+        conn.execute('''DELETE FROM manutot2015''')
+        conn.execute('''DELETE FROM patent2015''')
         datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1560508440&single=true&output=csv'
+        datasrc20102015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
         df = pd.read_csv(datasrc, skiprows=1)
+        # datasrc20102015 = 'ORS_GlobalBurdenDisease_2010B_2015.csv'
+        df = pd.read_csv(datasrc, skiprows=1)
+        df2015 = pd.read_csv(datasrc20102015, skiprows=1)
+        is_df2015_true = df2015.notnull()
+        is_df_true = df.notnull()
         i = 0;
         colorlist = []
-        colors = ['FFB31C','0083CA','EF3E2E','003452','86AAB9','CAEEFD','546675','8A5575','305516','B78988','BAE2DA','B1345D','5B75A7','906F76','C0E188','DE9C2A','F15A22','8F918B','F2C2B7','F7C406','B83F98','548A9B','D86375','F1DBC6','0083CA','7A80A3','CA8566','A3516E','1DF533','510B95','DFF352','F2C883','E3744D','26B2BE','5006BA','B99BCF','DC2A5A','D3D472','2A9DC4','C25C90','65A007','FE3289','C6DAB5','DDF6AC','B7E038','1ADBBD','3BC6D5','0ACD57','22419F','D47C5B']
+        colors = ['FFB31C', '0083CA', 'EF3E2E', '003452', '86AAB9', 'CAEEFD', '546675', '8A5575', '305516', 'B78988',
+                  'BAE2DA', 'B1345D', '5B75A7', '906F76', 'C0E188', 'DE9C2A', 'F15A22', '8F918B', 'F2C2B7', 'F7C406',
+                  'B83F98', '548A9B', 'D86375', 'F1DBC6', '0083CA', '7A80A3', 'CA8566', 'A3516E', '1DF533', '510B95',
+                  'DFF352', 'F2C883', 'E3744D', '26B2BE', '5006BA', 'B99BCF', 'DC2A5A', 'D3D472', '2A9DC4', 'C25C90',
+                  '65A007', 'FE3289', 'C6DAB5', 'DDF6AC', 'B7E038', '1ADBBD', '3BC6D5', '0ACD57', '22419F', 'D47C5B',
+                  '139A97', '1CDDD8', 'FF033D', '004444', 'C25C7D', 'B5A28F', 'C25C7D', '90BA3E', 'DA8709', 'B0B0CE',
+                  '2D00DD', 'DD2D00', 'FAFDFD', 'F5FD2F', '0DC4E0', 'FFD700', 'CC263C', 'F5F5DC', '3D9C35', '00CC00',
+                  'EAEAFF']
         for x in colors:
-            y = '#'+x
+            y = '#' + x
             colorlist.append(y)
-        print(colorlist)
+        # print(colorlist)
         manudata = []
         manutotal = []
-        for k in range(24,88):
-            company = df.iloc[k,2]
-            if isinstance(company,float):
+        manu2015total = []
+        for k in range(25, 88):
+            company = df.iloc[k, 2]
+            if isinstance(company, float):
                 if math.isnan(company):
                     break
             disease = 'TB'
-            tbdaly2010 = float(df.iloc[k,3].replace('-','0').replace(',',''))
-            tbdaly2013 = float(df.iloc[k,4].replace('-','0').replace(',',''))
+            tbdaly2010 = float(df.iloc[k, 3].replace('-', '0').replace(',', ''))
+            if df.iloc[k, 4] > 0:
+                tbdaly2013 = float(df.iloc[k, 4].replace('-', '0').replace(',', ''))
+            else:
+                tbdaly2013 = 0
             if tbdaly2010 > 0 or tbdaly2013 > 0:
                 color = colors[i]
-                row=[company,disease,tbdaly2010,tbdaly2013,color]
+                row = [company, disease, tbdaly2010, tbdaly2013, color]
                 manudata.append(row)
                 i += 1
                 conn.execute('insert into manudis values (?,?,?,?,?)', row)
-        i=0
-        for k in range(24,88):
-            company = df.iloc[k,6]
-            if isinstance(company,float):
+        i = 0
+        for k in range(25, 88):
+            company = df.iloc[k, 5]
+            if isinstance(company, float):
                 if math.isnan(company):
                     break
             disease = 'HIV'
-            hivdaly2010 = float(df.iloc[k,10].replace('-','0').replace(',',''))
-            hivdaly2013 = float(df.iloc[k,11].replace('-','0').replace(',',''))
+            try:
+                hivdaly2010 = float(df.iloc[k, 6].replace('-', '0').replace(',', ''))
+            except:
+                hivdaly2010 = 0
+            try:
+                hivdaly2013 = float(df.iloc[k, 7].replace('-', '0').replace(',', ''))
+            except:
+                hivdaly2013 = 0
             if hivdaly2010 > 0 or hivdaly2013 > 0:
                 color = colors[i]
-                row=[company,disease,hivdaly2010,hivdaly2013,color]
+                row = [company, disease, hivdaly2010, hivdaly2013, color]
                 i += 1
                 manudata.append(row)
                 conn.execute('insert into manudis values (?,?,?,?,?)', row)
-        i=0
-        for k in range(24,88):
-            company = df.iloc[k,12]
-            if isinstance(company,float):
+        i = 0
+        for k in range(25, 88):
+            company = df.iloc[k, 8]
+            if isinstance(company, float):
                 if math.isnan(company):
                     break
-            daly2010 = float(df.iloc[k,13].replace('-','0').replace(',',''))
-            daly2013 = float(df.iloc[k,14].replace('-','0').replace(',',''))
+            disease = 'Malaria'
+            try:
+                hivdaly2010 = float(df.iloc[k, 9].replace('-', '0').replace(',', ''))
+            except:
+                hivdaly2010 = 0
+            try:
+                hivdaly2013 = float(df.iloc[k, 10].replace('-', '0').replace(',', ''))
+            except:
+                hivdaly2013 = 0
+            if hivdaly2010 > 0 or hivdaly2013 > 0:
+                color = colors[i]
+                row = [company, disease, hivdaly2010, hivdaly2013, color]
+                i += 1
+                manudata.append(row)
+                conn.execute('insert into manudis values (?,?,?,?,?)', row)
+        i = 0
+        for k in range(25, 98):
+            company = df.iloc[k, 12]
+            if isinstance(company, float):
+                if math.isnan(company):
+                    break
+            try:
+                daly2010 = float(df.iloc[k, 13].replace('-', '0').replace(',', ''))
+            except:
+                daly2010 = 0
+            try:
+                daly2013 = float(df.iloc[k, 14].replace('-', '0').replace(',', ''))
+            except:
+                daly2013 = 0
             if daly2010 > 0 or daly2013 > 0:
                 color = colors[i]
-                row=[company,daly2010,daly2013,color]
+                row = [company, daly2010, daly2013, color]
                 i += 1
                 manutotal.append(row)
                 conn.execute('insert into manutot values (?,?,?,?)', row)
-        conn.commit()
-    elif db == 'country':
-        conn.execute('''DROP TABLE IF EXISTS countrybydis2010''')
-        conn.execute('''DROP TABLE IF EXISTS countrybydis2013''')
-        conn.execute('''CREATE TABLE countrybydis2010
-                     (country text, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schis real, onch real, lf real)''')
-        conn.execute('''CREATE TABLE countrybydis2013
-                     (country text, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schis real, onch real, lf real)''')
+        i = 0
+        for k in range(25, 62):
+            company = df2015.iloc[k, 2]
+            # print(company)
+            if isinstance(company, float):
+                if math.isnan(company):
+                    break
+            disease = 'TB'
+
+            _k3 = df2015.iloc[k, 3]
+            if is_df2015_true.iloc[k, 3] == False:
+                temp1 = 0
+            elif '-' in _k3:
+                temp1 = _k3.replace('-', '0')
+            elif ',' in _k3:
+                temp1 = _k3.replace(',', '')
+            else:
+                temp1 = _k3
+            try:
+                tbdaly2010B = float(temp1)
+            except:
+                tbdaly2010B = 0
+
+            _k4 = df2015.iloc[k, 4]
+            if is_df2015_true.iloc[k, 4] == False:
+                temp2 = 0
+            elif '-' in _k4:
+                temp2 = _k4.replace('-', '0')
+            elif ',' in _k4:
+                temp2 = _k4.replace(',', '')
+            else:
+                temp2 = _k4
+            try:
+                tbdaly2015 = float(temp2)
+            except:
+                tbdaly2015 = 0
+
+            if tbdaly2010B > 0 or tbdaly2015 > 0:
+                color = colors[i]
+                row = [company, disease, tbdaly2010B, tbdaly2015, color]
+                manudata.append(row)
+                i += 1
+                conn.execute('insert into manudis2015 values (?,?,?,?,?)', row)
+        i = 0
+        for k in range(25, 66):
+            company = df2015.iloc[k, 5]
+            if isinstance(company, float):
+                if math.isnan(company):
+                    break
+            # print(company)
+            disease = 'HIV'
+            _k6 = df2015.iloc[k, 6]
+            if is_df2015_true.iloc[k, 6] == False:
+                temph = 0
+            elif '-' in _k6:
+                temph = _k6.replace('-', '0')
+            elif ',' in _k6:
+                temph = _k6.replace(',', '')
+            else:
+                temph = _k6
+
+            hivdaly2010B = float(temph)
+
+            k7 = df2015.iloc[k, 7]
+            if is_df2015_true.iloc[k, 7] == False:
+                temph1 = 0
+            elif '-' in k7:
+                temph1 = k7.replace('-', '0')
+            elif ',' in k7:
+                temph1 = k7.replace(',', '')
+            else:
+                temph1 = k7
+            try:
+                hivdaly2015 = float(temph1)
+            except:
+                hivdaly2015 = 0
+            if hivdaly2010B > 0 or hivdaly2015 > 0:
+                color = colors[i]
+                row = [company, disease, hivdaly2010B, hivdaly2015, color]
+                i += 1
+                manudata.append(row)
+                conn.execute('insert into manudis2015 values (?,?,?,?,?)', row)
+
+        i = 0
+        for k in range(25, 66):
+            company = df2015.iloc[k, 8]
+            if isinstance(company, float):
+                if math.isnan(company):
+                    break
+            # print(company)
+            disease = 'Malaria'
+            _k9 = df2015.iloc[k, 9]
+            if is_df2015_true.iloc[k, 9] == False:
+                temph = 0
+            elif '-' in _k9:
+                temph = _k9.replace('-', '0')
+            elif ',' in _k9:
+                temph = _k9.replace(',', '')
+            else:
+                temph = _k9
+
+            hivdaly2010B = float(temph)
+
+            k10 = df2015.iloc[k, 10]
+            if is_df2015_true.iloc[k, 10] == False:
+                temph1 = 0
+            elif '-' in k10:
+                temph1 = k10.replace('-', '0')
+            elif ',' in k10:
+                temph1 = k10.replace(',', '')
+            else:
+                temph1 = k10
+
+            hivdaly2015 = float(temph1)
+            if hivdaly2010B > 0 or hivdaly2015 > 0:
+                color = colors[i]
+                row = [company, disease, hivdaly2010B, hivdaly2015, color]
+                i += 1
+                manudata.append(row)
+                conn.execute('insert into manudis2015 values (?,?,?,?,?)', row)
+
+        i = 0
+        for k in range(25, 98):
+            company = df2015.iloc[k, 12]
+            if isinstance(company, float):
+                if math.isnan(company):
+                    break
+            # print(company)
+            k13 = df2015.iloc[k, 13]
+            # print(k13)
+            if is_df2015_true.iloc[k, 13] == False:
+                temphd = 0
+            elif '-' in k13:
+                temphd = k13.replace('-', '0')
+            elif ',' in k13:
+                temphd = k13.replace(',', '')
+            else:
+                temphd = k13
+
+            daly2010B = float(temphd)
+
+            k14 = df2015.iloc[k, 14]
+            # print(k14)
+            if is_df2015_true.iloc[k, 14] == False:
+                tempd1 = 0
+            elif '-' in k14:
+                tempd1 = k14.replace('-', '0')
+            elif ',' in k14:
+                tempd1 = k14.replace(',', '')
+            else:
+                tempd1 = k14
+
+            daly2015 = float(tempd1)
+
+            if daly2010B > 0 or daly2015 > 0:
+                color = colors[i]
+                row = [company, daly2010B, daly2015, color]
+                i += 1
+                manu2015total.append(row)
+                # print(row)
+                conn.execute('insert into manutot2015 values (?,?,?,?)', row)
+
+        def cleanfloat(var):
+            # print(var)
+            if var == '#REF!' or var == '-' or var == 'nan':
+                var = 0
+            if type(var) != float:
+                var = float(var.replace(',', ''))
+            if var != var:
+                var = 0
+            return var
+
+        oldrow = ['']
+        pat2010 = []
+        for i in range(1, 39):
+            prow = []
+            comp = df.iloc[1, i]
+            # print(comp)
+            prow.append(comp)
+            for j in range(11, 21):
+                if j == 11:
+                    tb1 = cleanfloat(df.iloc[8, i])
+                    tb2 = cleanfloat(df.iloc[9, i])
+                    tb3 = cleanfloat(df.iloc[10, i])
+                    tb = [tb1, tb2, tb3]
+                    temp = (tb1 + tb2 + tb3)
+                    prow.append(temp)
+                elif j == 12:
+                    mal1 = cleanfloat(df.iloc[11, i])
+                    mal2 = cleanfloat(df.iloc[12, i])
+                    mal = [mal1, mal2]
+                    temp = (mal1 + mal2)
+                    prow.append(temp)
+                elif j == 20:
+                    total = cleanfloat(df.iloc[j, i])
+                    prow.append(total)
+                else:
+                    temp = df.iloc[j, i]
+                    if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                        temp = float(temp.replace(',', ''))
+                    if temp != temp:
+                        temp = 0
+                    prow.append(temp)
+            if prow[0] == oldrow[0]:
+                for ind in range(1, len(prow)):
+                    prow[ind] += oldrow[ind]
+            oldrow = prow
+            if comp != df.iloc[1, i + 1]:
+                pat2010.append(prow)
+        unmet = ['Unmet Need']
+        for j in range(11, 21):
+            if j == 11:
+                # print(df.iloc[7,46])
+                tb1 = cleanfloat(df.iloc[8, 42])
+                tb2 = cleanfloat(df.iloc[9, 42])
+                tb3 = cleanfloat(df.iloc[10, 42])
+                tb = [tb1, tb2, tb3]
+                temp = (tb1 + tb2 + tb3)
+                unmet.append(temp)
+            elif j == 12:
+                mal1 = cleanfloat(df.iloc[11, 42])
+                mal2 = cleanfloat(df.iloc[12, 45])
+                mal = [mal1, mal2]
+                temp = (mal1 + mal2)
+                unmet.append(temp)
+            elif j == 20:
+                total = cleanfloat(df.iloc[j, 42])
+                unmet.append(total)
+            else:
+                temp = df.iloc[j, 42]
+                if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                    temp = float(temp.replace(',', ''))
+                if temp != temp:
+                    temp = 0
+                unmet.append(temp)
+        pat2010.append(unmet)
+        colind = 0
+        for item in pat2010:
+            item.append(colors[colind])
+            colind += 1
+            conn.execute(' insert into patent2010 values (?,?,?,?,?,?,?,?,?,?,?,?) ', item)
+        # print(pat2010)
+
+        oldrow = ['']
+        pat2013 = []
+        for i in range(45, 89):
+            prow = []
+            comp = df.iloc[1, i]
+            prow.append(comp)
+            # print(comp)
+            for j in range(11, 21):
+                if j == 11:
+                    tb1 = cleanfloat(df.iloc[8, i])
+                    tb2 = cleanfloat(df.iloc[9, i])
+                    tb3 = cleanfloat(df.iloc[10, i])
+                    tb = [tb1, tb2, tb3]
+                    temp = (tb1 + tb2 + tb3)
+                    prow.append(temp)
+                elif j == 12:
+                    mal1 = cleanfloat(df.iloc[11, i])
+                    mal2 = cleanfloat(df.iloc[12, i])
+                    mal = [mal1, mal2]
+                    temp = (mal1 + mal2)
+                    prow.append(temp)
+                elif j == 20:
+                    total = cleanfloat(df.iloc[j, i])
+                    prow.append(total)
+                else:
+                    temp = df.iloc[j, i]
+                    if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                        temp = float(temp.replace(',', ''))
+                    if temp != temp:
+                        temp = 0
+                    prow.append(temp)
+            if prow[0] == oldrow[0]:
+                for ind in range(1, len(prow)):
+                    prow[ind] += oldrow[ind]
+            oldrow = prow
+            if comp != df.iloc[1, i + 1]:
+                pat2013.append(prow)
+        unmet = ['Unmet Need']
+        for j in range(11, 21):
+            if j == 11:
+                # print(df.iloc[8,93])
+                tb1 = cleanfloat(df.iloc[8, 92])
+                tb2 = cleanfloat(df.iloc[9, 92])
+                tb3 = cleanfloat(df.iloc[10, 92])
+                tb = [tb1, tb2, tb3]
+                temp = (tb1 + tb2 + tb3)
+                unmet.append(temp)
+            elif j == 12:
+                mal1 = cleanfloat(df.iloc[11, 92])
+                mal2 = cleanfloat(df.iloc[12, 92])
+                mal = [mal1, mal2]
+                temp = (mal1 + mal2)
+                unmet.append(temp)
+            elif j == 20:
+                total = cleanfloat(df.iloc[j, 92])
+                unmet.append(total)
+            else:
+                temp = df.iloc[j, 92]
+                if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                    temp = float(temp.replace(',', ''))
+                if temp != temp:
+                    temp = 0
+                unmet.append(temp)
+        pat2013.append(unmet)
+        colind = 0
+        for item in pat2013:
+            item.append(colors[colind])
+            colind += 1
+            conn.execute(' insert into patent2013 values (?,?,?,?,?,?,?,?,?,?,?,?) ', item)
+        # print(pat2013)
+
+        oldrow = ['']
+        pat2015 = []
+        for i in range(45, 88):
+            prow = []
+            # print(i)
+            # print(df2015)
+            comp = df2015.iloc[0, i]
+            if is_df2015_true.iloc[0, i] == True:
+                temp_comp = comp
+            else:
+                comp = temp_comp
+            prow.append(comp)
+            # print(comp)
+            for j in range(11, 21):
+                if j == 11:
+                    if is_df2015_true.iloc[7, i] == True:
+                        tb1 = cleanfloat(df2015.iloc[7, i])
+                    else:
+                        tb1 = 0
+                    if is_df2015_true.iloc[8, i] == True:
+                        tb2 = cleanfloat(df2015.iloc[8, i])
+                    else:
+                        tb2 = 0
+                    if is_df2015_true.iloc[9, i] == True:
+                        tb3 = cleanfloat(df2015.iloc[9, i])
+                    else:
+                        tb3 = 0
+                    tb = [tb1, tb2, tb3]
+                    temp = (tb1 + tb2 + tb3)
+                    prow.append(temp)
+                elif j == 12:
+                    if is_df2015_true.iloc[10, i] == True:
+                        mal1 = cleanfloat(df2015.iloc[10, i])
+                    else:
+                        mal1 = 0
+                    if is_df2015_true.iloc[11, i] == True:
+                        mal2 = cleanfloat(df2015.iloc[11, i])
+                    else:
+                        mal2 = 0
+                    mal = [mal1, mal2]
+                    temp = (mal1 + mal2)
+                    prow.append(temp)
+                elif j == 20:
+                    if is_df2015_true.iloc[j - 1, i] == True:
+                        total = cleanfloat(df2015.iloc[j - 1, i])
+                    else:
+                        total = 0
+                    prow.append(total)
+                else:
+                    temp = df2015.iloc[j - 1, i]
+                    # print(temp)
+                    if temp == '-' or temp == '#REF!':
+                        temp = 0
+                    if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                        temp = float(temp.replace(',', ''))
+                    if temp != temp:
+                        temp = 0
+                    prow.append(temp)
+            if prow[0] == oldrow[0]:
+                for ind in range(1, len(prow)):
+                    prow[ind] += oldrow[ind]
+            oldrow = prow
+            if is_df2015_true.iloc[0, i + 1] == True:
+                if comp != is_df2015_true.iloc[0, i + 1]:
+                    pat2015.append(prow)
+            else:
+                if comp != temp_comp:
+                    pat2015.append(prow)
+        unmet = ['Unmet Need']
+        for j in range(11, 21):
+            if j == 11:
+                # print(df2015.iloc[8, 93])
+                if is_df2015_true.iloc[7, 91] == True:
+                    tb1 = cleanfloat(df2015.iloc[7, 91])
+                else:
+                    tb1 = 0
+                if is_df2015_true.iloc[8, 91] == True:
+                    tb2 = cleanfloat(df2015.iloc[8, 91])
+                else:
+                    tb2 = 0
+                if is_df2015_true.iloc[9, 91] == True:
+                    tb3 = cleanfloat(df2015.iloc[9, 91])
+                else:
+                    tb3 = 0
+                tb = [tb1, tb2, tb3]
+                temp = (tb1 + tb2 + tb3)
+                unmet.append(temp)
+            elif j == 12:
+                if is_df2015_true.iloc[10, 91] == True:
+                    mal1 = cleanfloat(df2015.iloc[10, 91])
+                else:
+                    mall = 0
+                if is_df2015_true.iloc[11, 91] == True:
+                    mal2 = cleanfloat(df2015.iloc[1, 91])
+                else:
+                    mal2 = 0
+                mal = [mal1, mal2]
+                temp = (mal1 + mal2)
+                unmet.append(temp)
+            elif j == 20:
+                if is_df2015_true.iloc[j - 1, 91] == True:
+                    total = cleanfloat(df2015.iloc[j - 1, 91])
+                else:
+                    total = 0
+                unmet.append(total)
+            else:
+                temp = df2015.iloc[j - 1, 91]
+                if temp == '-' or temp == '#REF!':
+                    temp = 0
+                if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                    temp = float(temp.replace(',', ''))
+                if temp != temp:
+                    temp = 0
+                unmet.append(temp)
+        pat2015.append(unmet)
+        colind = 0
+        for item in pat2015:
+            item.append(colors[colind])
+            colind += 1
+            conn.execute(' insert into patent2015 values (?,?,?,?,?,?,?,?,?,?,?,?) ', item)
+
+        conn.execute('''DELETE FROM countrybydis2010_bkp''')
+        conn.execute('''DELETE FROM countrybydis2013_bkp''')
+        conn.execute('''DELETE FROM diseaseall2010_bkp''')
+        conn.execute('''DELETE FROM diseaseall2013_bkp''')
+        conn.execute('''DELETE FROM diseaseall2015_bkp''')
+        conn.execute('''INSERT INTO countrybydis2010_bkp SELECT * FROM countrybydis2010''')
+        conn.execute('''INSERT INTO countrybydis2013_bkp SELECT * FROM countrybydis2013''')
+        conn.execute('''INSERT INTO diseaseall2010_bkp SELECT * FROM diseaseall2010''')
+        conn.execute('''INSERT INTO diseaseall2013_bkp SELECT * FROM diseaseall2013''')
+        conn.execute('''INSERT INTO diseaseall2015_bkp SELECT * FROM diseaseall2015''')
+        conn.execute('''DELETE FROM diseaseall2010''')
+        conn.execute('''DELETE FROM diseaseall2013''')
+        conn.execute('''DELETE FROM diseaseall2015''')
+        conn.execute('''DELETE FROM countrybydis2010''')
+        conn.execute('''DELETE FROM countrybydis2013''')
         datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1996016204&single=true&output=csv'
         df = pd.read_csv(datasrc, skiprows=1)
-        for i in range (1,216):
+        datasrc3 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1996016204&single=true&output=csv'
+        df_2010B_2015 = pd.read_csv(datasrc3, skiprows=1)
+        for i in range(1, 218):
             temprow = []
-            temprow.append(df.iloc[i,0])
-            for k in range(1,10):
-                temp = df.iloc[i,k]
-                if isinstance(temp,float):
+            temp1 = df.iloc[i, 0].decode('utf8')
+            temprow.append(temp1)
+            # print df.iloc[i, 0]
+            for k in range(1, 10):
+                temp = df.iloc[i, k]
+                if isinstance(temp, float):
                     temprow.append(0.0)
                 else:
-                    temprow.append(float(temp.replace(',','').replace('-','0')))
+                    temprow.append(float(temp.replace(',', '').replace('-', '0')))
             conn.execute(' insert into countrybydis2010 values (?,?,?,?,?,?,?,?,?,?)', temprow)
-        for i in range (1,216):
+            conn.execute(' insert into diseaseall2010 values (?,?,?,?,?,?,?,?,?,?)', temprow)
+        for i in range(1, 218):
             temprow = []
-            temprow.append(df.iloc[i,11])
-            for k in range(12,21):
-                temp = df.iloc[i,k]
-                if isinstance(temp,float):
-                    temprow.append(0.0)
+            temprow.append(df.iloc[i, 11].decode('utf8'))
+            for k in range(12, 21):
+                temp = df.iloc[i, k]
+                # if isinstance(temp, float):
+                # temprow.append(0.0)
+                if k in (15, 19):
+                    try:
+                        temprow.append(temp)
+                    except:
+                        temprow.append(0.0)
                 else:
-                    temprow.append(float(temp.replace(',','').replace('-','0')))
+                    try:
+                        temprow.append(float(temp.replace(',', '').replace('-', '0')))
+                    except:
+                        temprow.append(0.0)
             conn.execute(' insert into countrybydis2013 values (?,?,?,?,?,?,?,?,?,?)', temprow)
-        conn.execute(''' DROP TABLE IF EXISTS country2010 ''')
-        conn.execute(''' DROP TABLE IF EXISTS country2013 ''')
-        conn.execute(''' DROP TABLE IF EXISTS countryp2010 ''')
-        conn.execute(''' DROP TABLE IF EXISTS countryp2013 ''')
+            conn.execute(' insert into diseaseall2013 values (?,?,?,?,?,?,?,?,?,?)', temprow)
 
-        conn.execute(''' CREATE TABLE country2010 (country text, total real, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, lf real) ''')
-        conn.execute(''' CREATE TABLE country2013 (country text, total real, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, onchoceriasis real, lf real) ''')
+        data2010B = []
+        data2015 = []
+        for i in range(1, 218):
+            temprow = []
+            temprow.append(df_2010B_2015.iloc[i, 11].decode('utf8'))
+            for k in range(12, 21):
+                temp = df_2010B_2015.iloc[i, k]
+                # if isinstance(temp, float):
+                # temprow.append(0.0)
+                if k in (15, 19):
+                    try:
+                        temprow.append(temp)
+                    except:
+                        temprow.append(0.0)
+                else:
+                    try:
+                        temprow.append(float(temp.replace(',', '').replace('-', '0')))
+                    except:
+                        temprow.append(0.0)
+            # conn.execute(' insert into countrybydis2015 values (?,?,?,?,?,?,?,?,?,?)', temprow)
+            conn.execute(' insert into diseaseall2015 values (?,?,?,?,?,?,?,?,?,?)', temprow)
 
-        conn.execute(''' CREATE TABLE countryp2010 (country text, total real, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, lf real) ''')
-        conn.execute(''' CREATE TABLE countryp2013 (country text, total real, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, onchoceriasis real, lf real) ''')
-
-
+        conn.execute(''' DELETE FROM country2010_bkp ''')
+        conn.execute(''' DELETE FROM country2013_bkp ''')
+        conn.execute(''' DELETE FROM country2015_bkp ''')
+        conn.execute(''' DELETE FROM countryp2010_bkp ''')
+        conn.execute(''' DELETE FROM countryp2013_bkp ''')
+        conn.execute(''' DELETE FROM countryp2015_bkp ''')
+        conn.execute(''' INSERT INTO country2010_bkp SELECT * FROM country2010''')
+        conn.execute(''' INSERT INTO country2013_bkp SELECT * FROM country2013''')
+        conn.execute(''' INSERT INTO country2015_bkp SELECT * FROM country2015''')
+        conn.execute(''' INSERT INTO countryp2010_bkp SELECT * FROM countryp2010''')
+        conn.execute(''' INSERT INTO countryp2013_bkp SELECT * FROM countryp2013''')
+        conn.execute(''' INSERT INTO countryp2015_bkp SELECT * FROM countryp2015''')
+        conn.execute(''' DELETE FROM country2010 ''')
+        conn.execute(''' DELETE FROM country2013 ''')
+        conn.execute(''' DELETE FROM country2015 ''')
+        conn.execute(''' DELETE FROM countryp2010 ''')
+        conn.execute(''' DELETE FROM countryp2013 ''')
+        conn.execute(''' DELETE FROM countryp2015 ''')
         url = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=0&single=true&output=csv'
         df = pd.read_csv(url, skiprows=1)
+        url2010B2015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=0&single=true&output=csv'
+        df2015 = pd.read_csv(url2010B2015, skiprows=1)
+        is_df2015_true = df2015.notnull()
+        is_df_true = df.notnull()
 
         def clean(num):
-            return float(num.replace(' ','').replace(',','').replace('-','0'))
+            return float(num.replace(' ', '').replace(',', '').replace('-', '0'))
 
         countrydata = []
         mapp = []
 
-        for i in range(3, 218):
-            country = df.iloc[i,0]
-            tb = clean(df.iloc[i,7])
-            malaria = clean(df.iloc[i,34])
-            hiv = clean(df.iloc[i,47])
-            roundworm = clean(df.iloc[i,66])
-            hookworm = clean(df.iloc[i,67])
-            whipworm = clean(df.iloc[i,68])
-            schistosomiasis = clean(df.iloc[i,76])
-            lf = clean(df.iloc[i,80])
+        for i in range(3, 220):
+            country = df.iloc[i, 0].decode('utf8')
+            tb = clean(df.iloc[i, 7])
+            malaria = clean(df.iloc[i, 34])
+            hiv = clean(df.iloc[i, 47])
+            roundworm = clean(df.iloc[i, 56])
+            hookworm = clean(df.iloc[i, 57])
+            whipworm = clean(df.iloc[i, 58])
+            schistosomiasis = clean(df.iloc[i, 61])
+            lf = clean(df.iloc[i, 64])
             total = tb + malaria + hiv + roundworm + hookworm + whipworm + schistosomiasis + lf
             row = [country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf]
             countrydata.append(row)
@@ -2300,15 +2656,15 @@ def updateit(db):
         maxval = maxrow[1]
         for j in sortedlist:
             country = j[0]
-            total = (j[1]/maxval) *  100
-            tb = (j[2]/maxval) *  100
-            malaria = (j[3]/maxval) *  100
-            hiv = (j[4]/maxval) *  100
-            roundworm = (j[5]/maxval) *  100
-            hookworm = (j[6]/maxval) *  100
-            whipworm = (j[7]/maxval) *  100
-            schistosomiasis = (j[8]/maxval) *  100
-            lf = (j[9]/maxval) *  100
+            total = (j[1] / maxval) * 100
+            tb = (j[2] / maxval) * 100
+            malaria = (j[3] / maxval) * 100
+            hiv = (j[4] / maxval) * 100
+            roundworm = (j[5] / maxval) * 100
+            hookworm = (j[6] / maxval) * 100
+            whipworm = (j[7] / maxval) * 100
+            schistosomiasis = (j[8] / maxval) * 100
+            lf = (j[9] / maxval) * 100
             row = [country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, lf]
             mapp.append(row)
         for k in countrydata:
@@ -2319,17 +2675,17 @@ def updateit(db):
 
         countrydata2 = []
         mapp2 = []
-        for i in range(3, 218):
-            country = df.iloc[i,83]
-            tb = clean(df.iloc[i,90])
-            malaria = clean(df.iloc[i,120])
-            hiv = clean(df.iloc[i,131])
-            roundworm = clean(df.iloc[i,150])
-            hookworm = clean(df.iloc[i,151])
-            whipworm = clean(df.iloc[i,152])
-            schistosomiasis = clean(df.iloc[i,160])
-            onchoceriasis = clean(df.iloc[i,165])
-            lf = clean(df.iloc[i,169])
+        for i in range(3, 220):
+            country = df.iloc[i, 67].decode('utf8')
+            tb = clean(df.iloc[i, 74])
+            malaria = clean(df.iloc[i, 104])
+            hiv = clean(df.iloc[i, 115])
+            roundworm = clean(df.iloc[i, 124])
+            hookworm = clean(df.iloc[i, 125])
+            whipworm = clean(df.iloc[i, 126])
+            schistosomiasis = clean(df.iloc[i, 129])
+            onchoceriasis = clean(df.iloc[i, 131])
+            lf = clean(df.iloc[i, 134])
             total = tb + malaria + hiv + roundworm + hookworm + whipworm + schistosomiasis + onchoceriasis + lf
             row = [country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchoceriasis, lf]
             countrydata2.append(row)
@@ -2339,16 +2695,16 @@ def updateit(db):
         maxval = maxrow[1]
         for j in sortedlist2:
             country = j[0]
-            total = (j[1]/maxval) *  100
-            tb = (j[2]/maxval) *  100
-            malaria = (j[3]/maxval) *  100
-            hiv = (j[4]/maxval) *  100
-            roundworm = (j[5]/maxval) *  100
-            hookworm = (j[6]/maxval) *  100
-            whipworm = (j[7]/maxval) *  100
-            schistosomiasis = (j[8]/maxval) *  100
-            onchoceriasis = (j[9]/maxval) * 100
-            lf = (j[10]/maxval) *  100
+            total = (j[1] / maxval) * 100
+            tb = (j[2] / maxval) * 100
+            malaria = (j[3] / maxval) * 100
+            hiv = (j[4] / maxval) * 100
+            roundworm = (j[5] / maxval) * 100
+            hookworm = (j[6] / maxval) * 100
+            whipworm = (j[7] / maxval) * 100
+            schistosomiasis = (j[8] / maxval) * 100
+            onchoceriasis = (j[9] / maxval) * 100
+            lf = (j[10] / maxval) * 100
             row = [country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchoceriasis, lf]
             mapp2.append(row)
 
@@ -2357,43 +2713,966 @@ def updateit(db):
 
         for l in mapp2:
             conn.execute(''' INSERT INTO countryp2013 VALUES (?,?,?,?,?,?,?,?,?,?,?) ''', l)
+
+        countrydata3 = []
+        mapp2 = []
+        for i in range(3, 220):
+            country = df2015.iloc[i, 67].decode('utf8')
+            if is_df2015_true.iloc[i, 74] == True:
+                tb = clean(df2015.iloc[i, 74])
+            else:
+                tb = 0
+            if is_df2015_true.iloc[i, 104] == True:
+                malaria = clean(df2015.iloc[i, 104])
+            else:
+                malaria = 0
+            if is_df2015_true.iloc[i, 115] == True:
+                hiv = clean(df2015.iloc[i, 115])
+            else:
+                hiv = 0
+            if is_df2015_true.iloc[i, 124] == True:
+                roundworm = clean(df2015.iloc[i, 124])
+            else:
+                roundworm = 0
+            if is_df2015_true.iloc[i, 125] == True:
+                hookworm = clean(df2015.iloc[i, 125])
+            else:
+                hookworm = 0
+            if is_df2015_true.iloc[i, 126] == True:
+                whipworm = clean(df2015.iloc[i, 126])
+            else:
+                whipworm = 0
+            if is_df2015_true.iloc[i, 129] == True:
+                schistosomiasis = clean(df2015.iloc[i, 129])
+            else:
+                schistosomiasis = 0
+            if is_df2015_true.iloc[i, 131] == True:
+                onchoceriasis = clean(df2015.iloc[i, 131])
+            else:
+                onchoceriasis = 0
+            if is_df2015_true.iloc[i, 134] == True:
+                lf = clean(df2015.iloc[i, 134])
+            else:
+                lf = 0
+            total = tb + malaria + hiv + roundworm + hookworm + whipworm + schistosomiasis + onchoceriasis + lf
+            row = [country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchoceriasis, lf]
+            countrydata3.append(row)
+
+        sortedlist2 = sorted(countrydata3, key=lambda xy: xy[1], reverse=True)
+        maxrow = sortedlist2[0]
+        maxval = maxrow[1]
+        for j in sortedlist2:
+            country = j[0]
+            total = (j[1] / maxval) * 100
+            tb = (j[2] / maxval) * 100
+            malaria = (j[3] / maxval) * 100
+            hiv = (j[4] / maxval) * 100
+            roundworm = (j[5] / maxval) * 100
+            hookworm = (j[6] / maxval) * 100
+            whipworm = (j[7] / maxval) * 100
+            schistosomiasis = (j[8] / maxval) * 100
+            onchoceriasis = (j[9] / maxval) * 100
+            lf = (j[10] / maxval) * 100
+            row = [country, total, tb, malaria, hiv, roundworm, hookworm, whipworm, schistosomiasis, onchoceriasis, lf]
+            mapp2.append(row)
+            # print(countrydata3)
+        for k in countrydata3:
+            # print(k)
+            conn.execute(''' INSERT INTO country2015 VALUES (?,?,?,?,?,?,?,?,?,?,?) ''', k)
+
+        for l in mapp2:
+            # print(l)
+            conn.execute(''' INSERT INTO countryp2015 VALUES (?,?,?,?,?,?,?,?,?,?,?) ''', l)
+
+        conn.execute('''DELETE FROM disease2010_bkp''')
+        conn.execute('''DELETE FROM disease2013_bkp''')
+        conn.execute('''DELETE FROM disease2015_bkp''')
+        conn.execute('''DELETE FROM disbars_bkp''')
+        conn.execute('''DELETE FROM distypes_bkp''')
+        conn.execute('''DELETE FROM disbars2010B2015_bkp''')
+        conn.execute('''DELETE FROM distypes2010B2015_bkp''')
+
+        conn.execute('''insert into disease2010_bkp select * from disease2010''')
+        conn.execute('''insert into disease2013_bkp select * from disease2013''')
+        conn.execute('''insert into disease2015_bkp select * from disease2015''')
+        conn.execute('''insert into disbars_bkp select * from disbars''')
+        conn.execute('''insert into distypes_bkp select * from distypes''')
+        conn.execute('''insert into disbars2010B2015_bkp select * from disbars2010B2015''')
+        conn.execute('''insert into distypes2010B2015_bkp select * from distypes2010B2015''')
+
+        conn.execute('''DELETE FROM disease2010''')
+        conn.execute('''DELETE FROM disease2013''')
+        conn.execute('''DELETE FROM disease2015''')
+        conn.execute('''DELETE FROM disbars''')
+        conn.execute('''DELETE FROM distypes''')
+        conn.execute('''DELETE FROM disbars2010B2015''')
+        conn.execute('''DELETE FROM distypes2010B2015''')
+
+        datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1560508440&single=true&output=csv'
+        # datasrc = 'ORS_GlobalBurdenDisease_2010_2013.csv'
+        df = pd.read_csv(datasrc, skiprows=1)
+        # datasrc2 = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQI7j2NartMCCF_N-OCkFqAyD67N9Q32yybE21x-zaRPrETsszdZep91dVVVSCjeXXbPjPfZVdE-odE/pub?gid=1560508440&single=true&output=csv'
+        datasrc2 = 'ORS_GlobalBurdenDisease_2010_2013.csv'
+        datasrc3 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
+        df2 = pd.read_csv(datasrc2, skiprows=1)
+        df_2010B_2015 = pd.read_csv(datasrc3, skiprows=1)
+
+        disease2010db = []
+        disease2013db = []
+        disease2015db = []
+        i = 0
+        for k in range(8, 20):
+            distypes = ['TB', 'TB', 'TB', 'Malaria', 'Malaria', 'HIV', 'Roundworm', 'Hookworm', 'Whipworm',
+                        'Schistosomiasis', 'Onchoceriasis', 'LF']
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            dis = ['Drug Susceptable TB', 'MDR-TB', 'XDR-TB', 'p. falc Malaria', 'p. vivax Malaria', 'HIV', 'Roundworm',
+                   'Hookworm', 'Whipworm', 'Schistosomiasis', 'Onchoceriasis', 'LF']
+            color = colors[i]
+            disease = dis[i]
+            distype = distypes[i]
+            temp = df.iloc[k, 39]
+            # print(temp)
+            temp1 = df.iloc[k, 41]
+            # print(temp1)
+            temp2 = df.iloc[k, 42]
+            # print(temp2)
+            if type(temp) != float and type(temp1) != float and type(temp2) != float:
+                impact = float(temp.replace(',', ''))
+                daly = float(temp1.replace(',', ''))
+                need = float(temp2.replace(',', ''))
+                i += 1
+                row = [disease, distype, impact, daly, need, color]
+                disease2010db.append(row)
+                conn.execute('insert into disease2010 values (?,?,?,?,?,?)', row)
+
+        i = 0
+        for k in range(8, 20):
+            distypes = ['TB', 'TB', 'TB', 'Malaria', 'Malaria', 'HIV', 'Roundworm', 'Hookworm', 'Whipworm',
+                        'Schistosomiasis', 'Onchoceriasis', 'LF']
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            dis = ['Drug Susceptable TB', 'MDR-TB', 'XDR-TB', 'p. falc Malaria', 'p. vivax Malaria', 'HIV', 'Roundworm',
+                   'Hookworm', 'Whipworm', 'Schistosomiasis', 'Onchoceriasis', 'LF']
+            color = colors[i]
+            disease = dis[i]
+            distype = distypes[i]
+            temp = df.iloc[k, 89]
+            temp1 = df.iloc[k, 91]
+            temp2 = df.iloc[k, 92]
+            # print(temp)
+            # print(temp1)
+            # print(temp2)
+            # print(distype)
+            # print(disease)
+            if type(temp) != float and type(temp1) != float and type(temp2) != float:
+                impact = float(temp.replace(',', ''))
+                daly = float(temp1.replace(',', ''))
+                need = float(temp2.replace(',', ''))
+                i += 1
+                row = [disease, distype, impact, daly, need, color]
+                disease2013db.append(row)
+                conn.execute('insert into disease2013 values (?,?,?,?,?,?)', row)
+        i = 0
+        for k in range(7, 19):
+            distypes = ['TB', 'TB', 'TB', 'Malaria', 'Malaria', 'HIV', 'Roundworm', 'Hookworm', 'Whipworm',
+                        'Schistosomiasis', 'Onchoceriasis', 'LF']
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            dis = ['Drug Susceptable TB', 'MDR-TB', 'XDR-TB', 'p. falc Malaria', 'p. vivax Malaria', 'HIV', 'Roundworm',
+                   'Hookworm', 'Whipworm', 'Schistosomiasis', 'Onchoceriasis', 'LF']
+            color = colors[i]
+            disease = dis[i]
+            distype = distypes[i]
+            temp = df_2010B_2015.iloc[k, 88]
+            temp1 = df_2010B_2015.iloc[k, 90]
+            temp2 = df_2010B_2015.iloc[k, 91]
+            # print(temp)
+            # print(temp1)
+            # print(temp2)
+            # print(distype)
+            # print(disease)
+            if type(temp) != float and type(temp1) != float and type(temp2) != float:
+                impact = float(temp.replace(',', ''))
+                daly = float(temp1.replace(',', ''))
+                need = float(temp2.replace(',', ''))
+                i += 1
+                row = [disease, distype, impact, daly, need, color]
+                disease2013db.append(row)
+                conn.execute('insert into disease2015 values (?,?,?,?,?,?)', row)
+
+        def stripdata(x, y):
+            try:
+                tmp = df.iloc[x, y]
+                if tmp == "#DIV/0!" or tmp == "nan" or tmp == "#REF!":
+                    return (0)
+                if isinstance(tmp, float) == False:
+                    return (float(tmp.replace(',', '').replace(' ', '0').replace('%', '')))
+                else:
+                    return (0)
+            except:
+                return (0)
+
+        def stripdata3(x, y):
+            try:
+                tmp = df_2010B_2015.iloc[x, y]
+                if tmp == "#DIV/0!" or tmp == "nan" or tmp == "#REF!":
+                    return (0)
+                if isinstance(tmp, float) == False:
+                    return (float(tmp.replace(',', '').replace(' ', '0').replace('%', '')))
+                else:
+                    return (0)
+            except:
+                return (0)
+
+        def stripdata2(x, y):
+            try:
+                tmp = df2.iloc[x, y]
+                if tmp == "#DIV/0!" or tmp == "nan" or tmp == "#REF!":
+                    return (0)
+                if isinstance(tmp, float) == False:
+                    res = float(tmp.replace(',', '').replace(' ', '0').replace('%', ''))
+                    if res > 10000:
+                        res = res * 0.00001
+                    # print(res)
+                    return (0.01 * res)
+                else:
+                    return (0)
+            except:
+                return (0)
+
+        disbars = []
+        j = 0
+        for k in range(104, 113):
+            colors = ['#FFB31C', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            diseasename = df.iloc[k, 7]
+            newdiseasename = df_2010B_2015.iloc[k, 7]
+            # print(diseasename)
+            color = colors[j]
+            efficacy2010 = stripdata(k, 8)
+            efficacy2013 = stripdata(k, 9)
+            coverage2010 = stripdata(k, 10)
+            coverage2013 = stripdata(k, 11)
+            need2010 = stripdata(k, 12)
+            need2013 = stripdata(k, 13)
+
+            newefficacy2010 = stripdata3(k, 8)
+            newefficacy2013 = stripdata3(k, 9)
+            newcoverage2010 = stripdata3(k, 10)
+            newcoverage2013 = stripdata3(k, 11)
+            newneed2010 = stripdata3(k, 12)
+            newneed2013 = stripdata3(k, 13)
+
+            roww = [diseasename, color, efficacy2010, efficacy2013, coverage2010, coverage2013, need2010, need2013]
+            newroww = [diseasename, color, newefficacy2010, newefficacy2013, newcoverage2010, newcoverage2013,
+                       newneed2010,
+                       newneed2013]
+            # print(roww)
+            disbars.append(roww)
+            j += 1
+            conn.execute('insert into disbars values (?,?,?,?,?,?,?,?)', roww)
+            # print(newdiseasename)
+            if (newdiseasename == 0):
+                print("")
+            else:
+                conn.execute('insert into disbars2010B2015 values (?,?,?,?,?,?,?,?)', newroww)
+
+        # =====================================Jing-3/3/2-18============================================
+        i = 1
+        j = 0
+        mark = 0
+        efficacy2010 = 0
+        efficacy2013 = 0
+        coverage2010 = 0
+        coverage2013 = 0
+        newefficacy2010 = 0
+        newefficacy2013 = 0
+        newcoverage2010 = 0
+        newcoverage2013 = 0
+        for k in [107, 109, 111, 112, 113, 115]:
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            dismap = [2, 3, 1]
+            position = [2, 0, 1]
+            disease = ['Normal-TB', 'MDR-TB', 'XDR-TB']
+            disetype = 'TB'
+            m = dismap[mark]
+            p = position[mark]
+            color = colors[j % 12]
+            diseasename = disease[mark]
+            efficacy2010 += stripdata(k, 1)
+            efficacy2013 += stripdata(k, 2)
+            coverage2010 += stripdata(k, 3)
+            coverage2013 += stripdata(k, 5)
+
+            newefficacy2010 += stripdata3(k, 1)
+            newefficacy2013 += stripdata3(k, 2)
+            newcoverage2010 += stripdata3(k, 3)
+            newcoverage2013 += stripdata3(k, 5)
+            # print('==========efficacy2010=====')
+
+            if i == m:
+                efficacy2010 /= m
+                efficacy2013 /= m
+                coverage2010 /= m
+                coverage2013 /= m
+
+                newefficacy2010 /= m
+                newefficacy2013 /= m
+                newcoverage2010 /= m
+                newcoverage2013 /= m
+
+                i = 0
+                mark += 1
+                roww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+                distypes.append(roww)
+
+                newroww = [diseasename, disetype, color, newefficacy2010, newefficacy2013, newcoverage2010,
+                           newcoverage2013,
+                           p]
+
+                # print(roww)
+                conn.execute('insert into distypes values (?,?,?,?,?,?,?,?)', roww)
+                conn.execute('insert into distypes2010B2015 values (?,?,?,?,?,?,?,?)', newroww)
+                efficacy2010 = 0
+                efficacy2013 = 0
+                coverage2010 = 0
+                coverage2013 = 0
+
+                newefficacy2010 = 0
+                newefficacy2013 = 0
+                newcoverage2010 = 0
+                newcoverage2013 = 0
+
+            j += 1
+            i += 1
+        cur = conn.execute(' select * from distypes where distype=? ', ('TB',))
+        data = cur.fetchall()
+
+        # print(data)
+        # print(data)
+        i = 1
+        j = 0
+        mark = 0
+        efficacy2010 = 0
+        efficacy2013 = 0
+        coverage2010 = 0
+        coverage2013 = 0
+        for k in [124, 117, 118, 119, 120, 121, 122]:
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            dismap = [1, 6]
+            position = [0, 1]
+            disease = ['p. vivax Malaria', 'p. falc Malaria']
+            disetype = 'Malaria'
+            m = dismap[mark]
+            p = position[mark]
+            color = colors[j % 12]
+            diseasename = disease[mark]
+            efficacy2010 += stripdata(k, 1)
+            efficacy2013 += stripdata(k, 2)
+            coverage2010 += stripdata(k, 3)
+            coverage2013 += stripdata(k, 5)
+
+            newefficacy2010 += stripdata3(k, 1)
+            newefficacy2013 += stripdata3(k, 2)
+            newcoverage2010 += stripdata3(k, 3)
+            newcoverage2013 += stripdata3(k, 5)
+            # print('==========This is Malaria=====')
+
+            if i == m:
+                efficacy2010 /= m
+                efficacy2013 /= m
+                coverage2010 /= m
+                coverage2013 /= m
+
+                newefficacy2010 /= m
+                newefficacy2013 /= m
+                newcoverage2010 /= m
+                newcoverage2013 /= m
+
+                i = 0
+                mark += 1
+                roww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+                distypes.append(roww)
+                # print(roww)
+                newroww = [diseasename, disetype, color, newefficacy2010, newefficacy2013, newcoverage2010,
+                           newcoverage2013,
+                           p]
+                conn.execute('insert into distypes values (?,?,?,?,?,?,?,?)', roww)
+                conn.execute('insert into distypes2010B2015 values (?,?,?,?,?,?,?,?)', newroww)
+                efficacy2010 = 0
+                efficacy2013 = 0
+                coverage2010 = 0
+                coverage2013 = 0
+                newefficacy2010 = 0
+                newefficacy2013 = 0
+                newcoverage2010 = 0
+                newcoverage2013 = 0
+
+            j += 1
+            i += 1
+        cur = conn.execute(' select * from distypes where distype=? ', ('Malaria',))
+        data = cur.fetchall()
+        # print(data)
+
+        i = 1
+        j = 0
+        mark = 0
+        efficacy2010 = 0
+        efficacy2013 = 0
+        coverage2010 = 0
+        coverage2013 = 0
+        for k in [161, 162, 163, 164, 165, 166]:
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            # dismap =[2,3,1]
+            position = [5, 4, 3, 2, 1, 0]
+            disease = ['Alb', 'Mbd', 'Ivm + Alb', 'Dec + Alb', 'Pzq + Alb', 'Pzq + Mbd']
+            disetype = 'Hookworm'
+            p = position[mark]
+            color = colors[j % 12]
+            diseasename = disease[mark]
+            efficacy2010 += stripdata(k, 1)
+            efficacy2013 += stripdata(k, 2)
+            coverage2010 += stripdata(k, 3)
+            coverage2013 += stripdata(k, 5)
+
+            newefficacy2010 += stripdata3(k, 1)
+            newefficacy2013 += stripdata3(k, 2)
+            newcoverage2010 += stripdata3(k, 3)
+            newcoverage2013 += stripdata3(k, 5)
+            # print('==========This is Hookworm=====')
+            i = 0
+            roww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+            distypes.append(roww)
+            # print(roww)
+            newroww = [diseasename, disetype, color, newefficacy2010, newefficacy2013, newcoverage2010, newcoverage2013,
+                       p]
+            conn.execute('insert into distypes values (?,?,?,?,?,?,?,?)', roww)
+            conn.execute('insert into distypes2010B2015 values (?,?,?,?,?,?,?,?)', roww)
+            efficacy2010 = 0
+            efficacy2013 = 0
+            coverage2010 = 0
+            coverage2013 = 0
+            newefficacy2010 = 0
+            newefficacy2013 = 0
+            newcoverage2010 = 0
+            newcoverage2013 = 0
+            mark += 1
+            j += 1
+        cur = conn.execute(' select * from distypes where distype=? ', ('Hookworm',))
+        data = cur.fetchall()
+        # print(data)
+
+        i = 1
+        j = 0
+        mark = 0
+        for k in [168, 169, 170, 171, 172, 173]:
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            # dismap =[2,3,1]
+            position = [5, 4, 3, 2, 1, 0]
+            disease = ['Alb', 'Mbd', 'Ivm + Alb', 'Dec + Alb', 'Pzq + Alb', 'Pzq + Mbd']
+            disetype = 'Whipworm'
+            p = position[mark]
+            color = colors[j % 12]
+            diseasename = disease[mark]
+            efficacy2010 += stripdata(k, 1)
+            efficacy2013 += stripdata(k, 2)
+            coverage2010 += stripdata(k, 3)
+            coverage2013 += stripdata(k, 5)
+            # print('==========This is Whipworm=====')
+            newefficacy2010 += stripdata3(k, 1)
+            newefficacy2013 += stripdata3(k, 2)
+            newcoverage2010 += stripdata3(k, 3)
+            newcoverage2013 += stripdata3(k, 5)
+            i = 0
+            roww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+            distypes.append(roww)
+            # print(roww)
+            newroww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+            conn.execute('insert into distypes values (?,?,?,?,?,?,?,?)', roww)
+            conn.execute('insert into distypes2010B2015 values (?,?,?,?,?,?,?,?)', newroww)
+            efficacy2010 = 0
+            efficacy2013 = 0
+            coverage2010 = 0
+            coverage2013 = 0
+            newefficacy2010 = 0
+            newefficacy2013 = 0
+            newcoverage2010 = 0
+            newcoverage2013 = 0
+            mark += 1
+            j += 1
+        cur = conn.execute(' select * from distypes where distype=? ', ('Whipworm',))
+        data = cur.fetchall()
+        # print(data)
+
+        i = 1
+        j = 0
+        mark = 0
+        for k in [175, 176, 177, 178, 179, 180]:
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            # dismap =[2,3,1]
+            position = [5, 4, 3, 2, 1, 0]
+            disease = ['Ivm + Alb', 'Dec + Alb', 'Pzq', 'Ivm', 'Dec', 'Alb']
+            disetype = 'Schistosomiasis'
+            p = position[mark]
+            color = colors[j % 12]
+            diseasename = disease[mark]
+            efficacy2010 += stripdata(k, 1)
+            efficacy2013 += stripdata(k, 2)
+            coverage2010 += stripdata(k, 3)
+            coverage2013 += stripdata(k, 5)
+            # print('==========This is Schistosomiasis=====')
+            newefficacy2010 += stripdata3(k, 1)
+            newefficacy2013 += stripdata3(k, 2)
+            newcoverage2010 += stripdata3(k, 3)
+            newcoverage2013 += stripdata3(k, 5)
+            i = 0
+            roww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+            distypes.append(roww)
+            # print(roww)
+            newroww = [diseasename, disetype, color, newefficacy2010, newefficacy2013, newcoverage2010, newcoverage2013,
+                       p]
+            conn.execute('insert into distypes values (?,?,?,?,?,?,?,?)', roww)
+            conn.execute('insert into distypes2010B2015 values (?,?,?,?,?,?,?,?)', newroww)
+            efficacy2010 = 0
+            efficacy2013 = 0
+            coverage2010 = 0
+            coverage2013 = 0
+            newefficacy2010 = 0
+            newefficacy2013 = 0
+            newcoverage2010 = 0
+            newcoverage2013 = 0
+            mark += 1
+            j += 1
+        cur = conn.execute(' select * from distypes where distype=? ', ('Schistosomiasis',))
+        data = cur.fetchall()
+        # print(data)
+
+        i = 1
+        j = 0
+        mark = 0
+        for k in [182, 183, 184, 185]:
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            # dismap =[2,3,1]
+            position = [3, 2, 1, 0]
+            disease = ['Nodulectomy', 'Suramin', 'Ivm', 'Dec']
+            disetype = 'Onchoceriasis'
+            p = position[mark]
+            color = colors[j % 12]
+            diseasename = disease[mark]
+            efficacy2010 += stripdata(k, 1)
+            efficacy2013 += stripdata(k, 2)
+            coverage2010 += stripdata(k, 3)
+            coverage2013 += stripdata(k, 5)
+
+            newefficacy2010 += stripdata3(k, 1)
+            newefficacy2013 += stripdata3(k, 2)
+            newcoverage2010 += stripdata3(k, 3)
+            newcoverage2013 += stripdata3(k, 5)
+            # print('==========This is Onchoceriasis=====')
+            i = 0
+            roww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+            distypes.append(roww)
+            # print(roww)
+            newroww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+            conn.execute('insert into distypes values (?,?,?,?,?,?,?,?)', roww)
+            conn.execute('insert into distypes2010B2015 values (?,?,?,?,?,?,?,?)', newroww)
+            efficacy2010 = 0
+            efficacy2013 = 0
+            coverage2010 = 0
+            coverage2013 = 0
+            newefficacy2010 = 0
+            newefficacy2013 = 0
+            newcoverage2010 = 0
+            newcoverage2013 = 0
+            mark += 1
+            j += 1
+        cur = conn.execute(' select * from distypes where distype=? ', ('Onchoceriasis',))
+        data = cur.fetchall()
+        # print(data)
+
+        i = 1
+        j = 0
+        mark = 0
+        for k in [187, 188, 189]:
+            colors = ['#FFB31C', '#FFB31C', '#FFB31C', '#0083CA', '#0083CA', '#EF3E2E', '#003452', '#86AAB9', '#CAEEFD',
+                      '#546675', '#8A5575', '#305516']
+            # dismap =[2,3,1]
+            position = [2, 1, 0]
+            disease = ['Dec', 'Dec + Alb', 'Ivm + Alb']
+            disetype = 'LF'
+            p = position[mark]
+            color = colors[j % 12]
+            diseasename = disease[mark]
+            efficacy2010 += stripdata(k, 1)
+            efficacy2013 += stripdata(k, 2)
+            coverage2010 += stripdata(k, 3)
+            coverage2013 += stripdata(k, 5)
+            # print('==========This is LF=====')
+            newefficacy2010 += stripdata3(k, 1)
+            newefficacy2013 += stripdata3(k, 2)
+            newcoverage2010 += stripdata3(k, 3)
+            newcoverage2013 += stripdata3(k, 5)
+            i = 0
+            roww = [diseasename, disetype, color, efficacy2010, efficacy2013, coverage2010, coverage2013, p]
+            distypes.append(roww)
+            # print(roww)
+            newroww = [diseasename, disetype, color, newefficacy2010, newefficacy2013, newcoverage2010, newcoverage2013,
+                       p]
+            conn.execute('insert into distypes values (?,?,?,?,?,?,?,?)', roww)
+            conn.execute('insert into distypes2010B2015 values (?,?,?,?,?,?,?,?)', newroww)
+            efficacy2010 = 0
+            efficacy2013 = 0
+            coverage2010 = 0
+            coverage2013 = 0
+            newefficacy2010 = 0
+            newefficacy2013 = 0
+            newcoverage2010 = 0
+            newcoverage2013 = 0
+            mark += 1
+            j += 1
+        cur = conn.execute(' select * from distypes where distype=? ', ('LF',))
+        data = cur.fetchall()
+
+        conn.execute('''DELETE FROM drugr2010_bkp''')
+        conn.execute('''DELETE FROM drugr2013_bkp''')
+        conn.execute('''DELETE FROM drugr2015_bkp''')
+
+        conn.execute('''INSERT INTO drugr2010_bkp SELECT * FROM drugr2010''')
+        conn.execute('''INSERT INTO drugr2013_bkp SELECT * FROM drugr2013''')
+        conn.execute('''INSERT INTO drugr2015_bkp SELECT * FROM drugr2015''')
+
+        conn.execute('''DELETE FROM drugr2010''')
+        conn.execute('''DELETE FROM drugr2013''')
+        conn.execute('''DELETE FROM drugr2015''')
+        datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1560508440&single=true&output=csv'
+        # datasrc = 'ORS_GlobalBurdenDisease_2010_2013.csv'
+        datasrc2010B2015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv';
+
+        df = pd.read_csv(datasrc, skiprows=1)
+        df2015 = pd.read_csv(datasrc2010B2015, skiprows=1)
+        is_df2015_true = df2015.notnull()
+        is_df_true = df.notnull()
+        drugdata = []
+        drugrdata = []
+        drug2010 = []
+        drug2013 = []
+        drug2015 = []
+        perc2010 = []
+
+        def cleanfloat(var):
+            if var == '#REF!':
+                var = 0
+            if type(var) != float and type(var) != int:
+                var = float(var.replace(',', ''))
+            if var != var:
+                var = 0
+            return var
+
+        for i in range(1, 39):
+            drugr = []
+            name = df.iloc[5, i]
+            # print(name)
+            drugr.append(name)
+            company = df.iloc[1, i]
+            # print(company)
+            drugr.append(company)
+            for j in range(10, 20):
+                if j == 10:
+                    tb1 = cleanfloat(df.iloc[8, i])
+                    tb2 = cleanfloat(df.iloc[9, i])
+                    tb3 = cleanfloat(df.iloc[10, i])
+                    tb = [tb1, tb2, tb3]
+                    temp = (tb1 + tb2 + tb3)
+                    drugr.append(temp)
+                elif j == 11:
+                    mal1 = cleanfloat(df.iloc[11, i])
+                    mal2 = cleanfloat(df.iloc[12, i])
+                    mal = [mal1, mal2]
+                    temp = (mal1 + mal2)
+                    drugr.append(temp)
+                elif j == 19:
+                    total = cleanfloat(df.iloc[j + 1, i])
+                    zz = [name, total]
+                    perc2010.append(zz)
+                else:
+                    temp = df.iloc[j + 1, i]
+                    if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                        temp = float(temp.replace(',', ''))
+                    if temp != temp:
+                        temp = 0
+                    drugr.append(temp)
+                if temp > 0:
+                    if j == 10:
+                        disease = 'TB'
+                        color = 'FFB31C'
+                    elif j == 11 or j == 12:
+                        disease = 'Malaria'
+                        color = '0083CA'
+                    elif j == 13:
+                        disease = 'HIV'
+                        color = 'EF3E2E'
+                    elif j == 14:
+                        disease = 'Roundworm'
+                        color = '003452'
+                    elif j == 15:
+                        disease = 'Hookworm'
+                        color = '86AAB9'
+                    elif j == 16:
+                        disease = 'Whipworm'
+                        color = 'CAEEFD'
+                    elif j == 17:
+                        disease = 'Schistosomiasis'
+                        color = '546675'
+                    elif j == 18:
+                        disease = 'Onchocerasis'
+                        color = '8A5575'
+                    elif j == 19:
+                        disease = 'LF'
+                        color = '305516'
+                    company = df.iloc[1, i]
+                    drugrow = [name, company, disease, temp, color]
+                    drug2010.append(drugrow)
+
+            if isinstance(df.iloc[20, i], float) == False:
+                score = float(df.iloc[20, i].replace(',', ''))
+            else:
+                score = df.iloc[20, i]
+            row = [name, score]
+            drugdata.append(row)
+            drugrdata.append(drugr)
+
+        unmet = ['Unmet Need', 'Unmet Need']
+        unmetsum = 0
+        for xx in [[8, 9, 10], [11, 12], [13], [14], [15], [16], [17], [18], [19]]:
+            val = 0
+            for yy in xx:
+                t = df.iloc[yy, 42]
+                if isinstance(t, float) == False and isinstance(t, int) == False:
+                    t = float(t.replace(',', ''))
+                if t != t:
+                    t = 0
+                val += t
+            unmet.append(val)
+            unmetsum += val
+        # print(unmet)
+        # print(drugrdata[0])
+        drugrdata.append(unmet)
+
+        for row in drugrdata:
+            tot = sum(row[2:])
+            row.append(tot)
+            conn.execute('insert into drugr2010 values (?,?,?,?,?,?,?,?,?,?,?,?)', row)
+
+        drugdata = []
+        drugrdata = []
+        perc2013 = []
+
+        for i in range(45, 89):
+            drugr = []
+            name = df.iloc[5, i]
+            # print(name)
+            drugr.append(name)
+            company = df.iloc[1, i]
+            drugr.append(company)
+            # print(company)
+            for j in range(10, 20):
+                if j == 10:
+                    tb1 = cleanfloat(df.iloc[8, i])
+                    tb2 = cleanfloat(df.iloc[9, i])
+                    tb3 = cleanfloat(df.iloc[10, i])
+                    tb = [tb1, tb2, tb3]
+                    temp = (tb1 + tb2 + tb3)
+                    drugr.append(temp)
+                elif j == 11:
+                    mal1 = cleanfloat(df.iloc[11, i])
+                    mal2 = cleanfloat(df.iloc[12, i])
+                    mal = [mal1, mal2]
+                    temp = (mal1 + mal2)
+                    drugr.append(temp)
+                elif j == 19:
+                    total = cleanfloat(df.iloc[j + 1, i])
+                    zz = [name, total]
+                    perc2013.append(zz)
+                else:
+                    temp = df.iloc[j + 1, i]
+                    if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                        temp = float(temp.replace(',', ''))
+                    if temp != temp:
+                        temp = 0
+                    drugr.append(temp)
+                if temp > 0:
+                    if j == 10:
+                        disease = 'TB'
+                        color = 'FFB31C'
+                    elif j == 11 or j == 12:
+                        disease = 'Malaria'
+                        color = '0083CA'
+                    elif j == 13:
+                        disease = 'HIV'
+                        color = 'EF3E2E'
+                    elif j == 14:
+                        disease = 'Roundworm'
+                        color = '003452'
+                    elif j == 15:
+                        disease = 'Hookworm'
+                        color = '86AAB9'
+                    elif j == 16:
+                        disease = 'Whipworm'
+                        color = 'CAEEFD'
+                    elif j == 17:
+                        disease = 'Schistosomiasis'
+                        color = '546675'
+                    elif j == 18:
+                        disease = 'Onchocerasis'
+                        color = '8A5575'
+                    elif j == 19:
+                        disease = 'LF'
+                        color = '305516'
+                    company = df.iloc[1, i]
+                    drugrow = [name, company, disease, temp, color]
+                    drug2013.append(drugrow)
+
+            if isinstance(df.iloc[20, i], float) == False:
+                score = float(df.iloc[20, i].replace(',', ''))
+            else:
+                score = df.iloc[20, i]
+            row = [name, score]
+            drugdata.append(row)
+            drugrdata.append(drugr)
+
+        unmet = ['Unmet Need', 'Unmet Need']
+        unmetsum = 0
+        for xx in [[8, 9, 10], [11, 12], [13], [14], [15], [16], [17], [18], [19]]:
+            val = 0
+            for yy in xx:
+                t = df.iloc[yy, 92]
+                if isinstance(t, float) == False and isinstance(t, int) == False:
+                    t = float(t.replace(',', ''))
+                if t != t:
+                    t = 0
+                val += t
+            unmet.append(val)
+            unmetsum += val
+        drugrdata.append(unmet)
+        sortedlist = sorted(drug2013, key=lambda xy: xy[3], reverse=True)
+
+        for row in drugrdata:
+            tot = sum(row[2:])
+            row.append(tot)
+            conn.execute('insert into drugr2013 values (?,?,?,?,?,?,?,?,?,?,?,?)', row)
+        perc2013.sort(key=lambda x: x[1], reverse=True)
+
+        drugrdata = []
+        perc2015 = []
+        for i in range(45, 88):
+            drugr = []
+            name = df2015.iloc[4, i]
+            drugr.append(name)
+            company = df2015.iloc[0, i]
+            if is_df2015_true.iloc[0, i] == True:
+                temp_comp = company
+            else:
+                company = temp_comp
+            drugr.append(company)
+            for j in range(11, 20):
+                if j == 11:
+                    tb1 = cleanfloat(df2015.iloc[7, i])
+                    tb2 = cleanfloat(df2015.iloc[8, i])
+                    tb3 = cleanfloat(df2015.iloc[9, i])
+                    tb = [tb1, tb2, tb3]
+                    temp = (tb1 + tb2 + tb3)
+                    drugr.append(temp)
+                elif j == 12:
+                    mal1 = cleanfloat(df2015.iloc[10, i])
+                    mal2 = cleanfloat(df2015.iloc[11, i])
+                    mal = [mal1, mal2]
+                    temp = (mal1 + mal2)
+                    drugr.append(temp)
+                elif j == 20:
+                    total = cleanfloat(df2015.iloc[j, i])
+                    zz = [name, total]
+                    perc2015.append(zz)
+                else:
+                    temp = df2015.iloc[j - 1, i]
+                    if isinstance(temp, float) == False and isinstance(temp, int) == False:
+                        temp = float(temp.replace(',', ''))
+                    if temp != temp:
+                        temp = 0
+                    drugr.append(temp)
+                if temp > 0:
+                    if j == 11:
+                        disease = 'TB'
+                        color = 'FFB31C'
+                    elif j == 12:
+                        disease = 'Malaria'
+                        color = '0083CA'
+                    elif j == 13:
+                        disease = 'HIV'
+                        color = 'EF3E2E'
+                    elif j == 14:
+                        disease = 'Roundworm'
+                        color = '003452'
+                    elif j == 15:
+                        disease = 'Hookworm'
+                        color = '86AAB9'
+                    elif j == 16:
+                        disease = 'Whipworm'
+                        color = 'CAEEFD'
+                    elif j == 17:
+                        disease = 'Schistosomiasis'
+                        color = '546675'
+                    elif j == 18:
+                        disease = 'Onchocerasis'
+                        color = '8A5575'
+                    elif j == 19:
+                        disease = 'LF'
+                        color = '305516'
+                    company = df2015.iloc[1, i]
+                    drugrow = [name, company, disease, temp, color]
+                    drug2015.append(drugrow)
+
+            if isinstance(df2015.iloc[20, i], float) == False:
+                score = float(df2015.iloc[20, i].replace(',', ''))
+            else:
+                score = df2015.iloc[20, i]
+            row = [name, score]
+            drugdata.append(row)
+            drugrdata.append(drugr)
+
+        unmet = ['Unmet Need', 'Unmet Need']
+        unmetsum = 0
+        for xx in [[7, 8, 9], [10, 11], [12], [13], [14], [15], [16], [17], [18]]:
+            val = 0
+            for yy in xx:
+                t = df2015.iloc[yy, 91]
+                if isinstance(t, float) == False and isinstance(t, int) == False:
+                    t = float(t.replace(',', ''))
+                if t != t:
+                    t = 0
+                val += t
+            unmet.append(val)
+            unmetsum += val
+        drugrdata.append(unmet)
+        sortedlist = sorted(drug2015, key=lambda xy: xy[3], reverse=True)
+
+        for row in drugrdata:
+            tot = sum(row[2:])
+            row.append(tot)
+            conn.execute('insert into drugr2015 values (?,?,?,?,?,?,?,?,?,?,?,?)', row)
+        perc2015.sort(key=lambda x: x[1], reverse=True)
         conn.commit()
-    conn.close()
-    return render_template('updatedb.html')
-
-@app.route('/viewdb/<table>')
-def dbviewer(table):
-    print("inside dbviewer")
-    sheetdata = []
-    if table == 'company':
-        conn = connect_db()
-        xx = conn.execute(' select * from manutot ')
-        yy = conn.execute(' select * from manudis ')
-        manutot = xx.fetchall()
-        manudis = yy.fetchall()
-        sheetdata = [[manutot,list(map(lambda x: x[0], xx.description)),'Table: manutot'],[manudis,list(map(lambda x: x[0], yy.description)),'Table: manudis']]
-        dbheader = ['Company Tables','company']
-        conn.close()
-    elif table == 'country':
-        conn = connect_db()
-        cd2010 = conn.execute(' select * from countrybydis2010 ')
-        cd2013 = conn.execute(' select * from countrybydis2013 ')
-        cnt2010 = conn.execute(' select * from country2010 ')
-        cnt2013 = conn.execute(' select * from country2013 ')
-        cntp2010 = conn.execute(' select * from countryp2010 ')
-        cntp2013 = conn.execute(' select * from countryp2013 ')
-        countrybydis2010 = cd2010.fetchall()
-        countrybydis2013 = cd2013.fetchall()
-        country2010 = cnt2010.fetchall()
-        country2013 = cnt2013.fetchall()
-        countryp2010 = cntp2010.fetchall()
-        countryp2013 = cntp2013.fetchall()
-        sheetdata = [[countrybydis2010,list(map(lambda x: x[0], cd2010.description)),'Table: countrybydis2010'],[countrybydis2013,list(map(lambda x: x[0], cd2013.description)),'Table: countrybydis2013'],[country2010,list(map(lambda x: x[0], cnt2010.description)),'Table: country2010'],[country2013,list(map(lambda x: x[0], cnt2013.description)),'Table: country2013'],[countryp2010,list(map(lambda x: x[0], cntp2010.description)),'Table: countryp2010'],[countryp2013,list(map(lambda x: x[0], cntp2013.description)),'Table: countryp2013']]
-        dbheader = ['Country Tables','country']
-        conn.close()
-    return render_template('dbviewer.html', sheetdata=sheetdata, scrolling=2, dbheader=dbheader)
-
-
+        print ("Completed Update")
+    except Exception as e:
+        conn.rollback()
+        return render_template('accountF.html', showthediv=0)
+    return render_template('accountS.html', showthediv=0)
 
 if __name__ == '__main__':
     app.run(debug=False)

@@ -181,11 +181,18 @@
                         startup: true,
                         duration: 1000,
                         easing: 'out',
-                    }
+                    },
+                    chartArea: {
+    backgroundColor: {
+        stroke: '#4c4c4c',
+        strokeWidth: 1
+    },
+    
+}
                 };
             var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
             barchart.draw(bardata,baroptions);
-            var content_data = row[2]+" is ranked in "+row[4]+" place in our index."+row[2]+"’s drugs have a total impact score of "+row[3]+". Of that score, <<disease1percent>>%, or <<disease1impact>>, comes from treating <<disease1>> and <<disease2percent>>%, or <<disease2impact>>, comes from treating <<disease2>>."+row[2]+" receives credit for <<numberofdrugsdisease1>> treatments against <<disease1>>, <<drug1disease1>> and <<drug2disease1>> [etc. if more than one exist]. These <<numberofdrugsdisease1>> <<disease1>> drugs are responsible for averting the loss of <<percentdalyscompanydisease1>> of the worldwide DALYs that we estimate would have been lost due to <<disease1>> in <<year>> in the absence of effective treatment [similarly for other diseases]. "+row[2]+"’s drug portfolio placed it <<companyrankdisease1>> in terms of total averted DALYs for <<disease1>>."+row[2]+" also receives credit for <<numberofdrugsdisease2>> <<disease2>> drugs, <<drug1disease2>> and <<drug2disease2>>. "+row[2]+"’s <<disease2>> drug portfolio helped to prevent <<percentdalyscompanydisease2>> of the DALYs that we estimate would have been lost to <<disease2>> in <<year>>. "+row[2]+"’s drug portfolio placed it <<companyrankdisease2>> in terms of total averted DALYs for <<disease2>>.<<drughighestscore>> for <<diseasehighestscore>> contributes the most to <<company>>’s score. Drug <<drughighestefficacy> has the <<rankefficacy>> greatest efficacy, <<ranktreatmentpercentage>> greatest treatment percentage and disease <<disease1>> accounts for <<percentofdesiseseburden>> percent of the global burden of disease that we estimate would be lost without treatment (out of all the diseases in our model).";
+            var content_data = row[2]+" is ranked in "+row[4]+" place in our index."+row[2]+"’s drugs have a total impact score of "+row[3]+". Of that score, <<disease1percent Y>>%, or <<disease1impact>>, comes from treating <<disease1>> and <<disease2percent>>%, or <<disease2impact>>, comes from treating <<disease2>>."+row[2]+" receives credit for <<numberofdrugsdisease1>> treatments against <<disease1>>, <<drug1disease1>> and <<drug2disease1>> [etc. if more than one exist]. These <<numberofdrugsdisease1>> <<disease1>> drugs are responsible for averting the loss of <<percentdalyscompanydisease1>> of the worldwide DALYs that we estimate would have been lost due to <<disease1>> in <<year>> in the absence of effective treatment [similarly for other diseases]. "+row[2]+"’s drug portfolio placed it <<companyrankdisease1>> in terms of total averted DALYs for <<disease1>>."+row[2]+" also receives credit for <<numberofdrugsdisease2>> <<disease2>> drugs, <<drug1disease2>> and <<drug2disease2>>. "+row[2]+"’s <<disease2>> drug portfolio helped to prevent <<percentdalyscompanydisease2>> of the DALYs that we estimate would have been lost to <<disease2>> in <<year>>. "+row[2]+"’s drug portfolio placed it <<companyrankdisease2>> in terms of total averted DALYs for <<disease2>>.<<drughighestscore>> for <<diseasehighestscore>> contributes the most to <<company>>’s score. Drug <<drughighestefficacy> has the <<rankefficacy>> greatest efficacy, <<ranktreatmentpercentage>> greatest treatment percentage and disease <<disease1>> accounts for <<percentofdesiseseburden>> percent of the global burden of disease that we estimate would be lost without treatment (out of all the diseases in our model).";
 
             document.getElementById('company_head').innerHTML = row[2];
             document.getElementById('cont').innerHTML = content_data;
@@ -207,7 +214,7 @@
     </div>
     {% endfor %}
   </div>
-  
+
 <!--End list of company-->
 <!--Company details with bar graph and paragraph-->    
   <div class="col-sm-6">
