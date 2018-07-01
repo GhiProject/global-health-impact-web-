@@ -1,4 +1,4 @@
-{% extends "account.html" %}
+{% extends "layout.html" %}
 {% block title %}
 <title>Account Management</title>
 {% endblock %}
@@ -14,7 +14,10 @@
 <div class="row">
     <div class="col-sm-6">
         <div class="contentbox">
-            <p class="redtxt"><b>Update Failed. Please try again.</b></p>
+            <p class="redtxt"><b>Update Failed because of technical issue - </b></p>
+            {{error}}
+            <br>
+            <p class="redtxt">Please try later </p>
 			</div>
 	</div>
      			
