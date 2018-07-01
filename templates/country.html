@@ -33,15 +33,9 @@
         mapoptions['colors'] = ['#548A9B', '#C0E188', '#EE8D7D'];
         mapoptions['width'] = 450;
         mapoptions['backgroundColor'] = '#ffffff';
-
-
         var mapcontainer = document.getElementById('regions_div');
-
         var geomap = new google.visualization.GeoChart(mapcontainer);
-
         geomap.draw(data, mapoptions);
-
-
         function myClickHandler(){
             var selection = geomap.getSelection();
             var message = '';
@@ -54,9 +48,7 @@
             {% endif %}
             // countryclick(item.row);
         }
-
         google.visualization.events.addListener(geomap, 'select', myClickHandler);
-
          row = sorted[0];
          var bardata = new google.visualization.DataTable();
          bardata.addColumn('string','Country');
@@ -81,12 +73,10 @@
                  easing: 'out',
              }
          };
-
          var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
          barchart.draw(bardata,baroptions);
          document.getElementById('cntname').innerHTML = row[0];
     };
-
     {% if isall == 1 %}
         function countryclickAll(rownum) {
             console.log("Inside countryclick");
@@ -152,15 +142,12 @@
             };
             // alert(bardata);
             // alert(baroptions);
-
             var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
             barchart.draw(bardata,baroptions);
             // console.log(row[0]);
             document.getElementById('cntname').innerHTML = row[0];
         };
     {% endif %}
-
-
 </script>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -175,7 +162,6 @@
         {% endif %}
         // alert("heererere");
     });
-
 </script>
 
 <div class="row" id="scrollhere" onload="func1()">

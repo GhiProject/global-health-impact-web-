@@ -1,4 +1,3 @@
-
 # A very simple Flask Hello World app for you to get started with...
 
 from flask import Flask, render_template, g
@@ -43,7 +42,9 @@ def requires_auth(f):
 
 def connect_db():
     # print("in connect_db")
-    return sqlite3.connect('F:/global-health-impact-web/ghi.db')
+
+     return sqlite3.connect('C:\my work\GHI\global-health-impact-web-\ghi.db')
+
 
 @app.before_request
 def before_request():
@@ -734,37 +735,42 @@ def diseasepg(dyear, ddisease):
 
 @app.route('/reports')
 def reports():
-    repdata = g.db.execute('select * from reports2010')
-    repbar = g.db.execute('select * from reportsdetail2010')
+    try:
+        datasrc20102015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
+        df = pd.read_csv(datasrc, skiprows=1)
+        print(df)
+        repdata = g.db.execute('select * from reports2010')
+        repbar = g.db.execute('select * from reportsdetail2010')
+        reports2010 = repdata.fetchall()
+        reportsbar2010 = repbar.fetchall()
+        reportdict = []
+        reportbar2010 = []
+        print(reports2010)
+        print(reportsbar2010)
 
-    reports2010 = repdata.fetchall()
-    reportsbar2010 = repbar.fetchall()
-    reportdict = []
-    reportbar2010 = []
-    print(reports2010)
-    print(reportsbar2010)
-
-    for i in reports2010:
-        id = i[0]
-        year = i[1]
-        cname = str(i[2])
-        timpactscre = i[3]
-        rank = i[4]
-        numOfDis = i[5]
-        row = [id, year, cname, timpactscre, rank, numOfDis]
-        reportdict.append(row)
-    print(reportdict)
+        for i in reports2010:
+            id = i[0]
+            year = i[1]
+            cname = str(i[2])
+            timpactscre = i[3]
+            rank = i[4]
+            numOfDis = i[5]
+            row = [id, year, cname, timpactscre, rank, numOfDis]
+            reportdict.append(row)
+        print(reportdict)
 
 
-    for i in reportsbar2010:
-        _id = i[0]
-        year = i[1]
-        cname = str(i[2])
-        drug = str(i[3])
-        disease = str(i[4])
-        impact = i[5]
-        rowbar = [_id, year, cname, drug, disease, impact]
-        reportbar2010.append(rowbar)
+        for i in reportsbar2010:
+            _id = i[0]
+            year = i[1]
+            cname = str(i[2])
+            drug = str(i[3])
+            disease = str(i[4])
+            impact = i[5]
+            rowbar = [_id, year, cname, drug, disease, impact]
+            reportbar2010.append(rowbar)
+    except Exception as e:
+        print("ERROR in flask_py reports")    
     print(reportbar2010)
 
 
@@ -1079,6 +1085,7 @@ def country():
     print("printing sort")
     print(sort)
     g.db.close()
+
     return render_template('country.html', showindex=1, navsub=1, name=name, color=color, mapdata=mapdata, sortedlist=sortedlist, sortedval = sort, year=year, isall=isall, barlist = barlist, speclocate = speclocate)
 
 @app.route('/index/country/<xyear>/<xdisease>')
@@ -1352,7 +1359,6 @@ def company():
         print(k)
         if n < 4:
             comp = k[0]
-            #shortcomp = comp[0:10]
             temprow.append(comp)
             temprow.append(comp)
             scolor=k[2]
@@ -1370,7 +1376,7 @@ def company():
         print(k)
         if n < 4:
             comp = k[0]
-            #shortcomp = comp[0:10]
+
             temprow.append(comp)
             temprow.append(comp)
             scolor=k[2]
@@ -1466,7 +1472,7 @@ def companyindx(year,disease):
                 print(k)
                 if n < 4:
                     comp = k[0]
-                    #shortcomp = comp[0:10]
+
                     temprow.append(comp)
                     temprow.append(comp)
                     scolor = k[2]
@@ -1483,7 +1489,7 @@ def companyindx(year,disease):
                 print(k)
                 if n < 4:
                     comp = k[0]
-                    #shortcomp = comp[0:10]
+
                     temprow.append(comp)
                     temprow.append(comp)
                     scolor = k[2]
@@ -1626,7 +1632,7 @@ def companyindx(year,disease):
         print(k)
         if n < 4:
             comp = k[0]
-            #shortcomp = comp[0:10]
+
             temprow.append(comp)
             temprow.append(comp)
             scolor=k[2]
@@ -1647,7 +1653,7 @@ def companyindx(year,disease):
         print(k)
         if n < 4:
             comp = k[0]
-            #shortcomp = comp[0:10]
+
             temprow.append(comp)
             temprow.append(comp)
             scolor=k[2]
@@ -1796,7 +1802,7 @@ def patent(year,disease):
         comp = k[0]
         score = k[1]
         color = "#"+k[2]
-        #shortcomp = comp[0:10]
+
         labit.append(comp)
         labit.append(comp)
         labit.append(color)
@@ -1821,7 +1827,7 @@ def patent(year,disease):
         comp = k[0]
         score = k[1]
         color = "#"+k[2]
-        #shortcomp = comp[0:10]
+
         labit.append(comp)
         labit.append(comp)
         labit.append(color)
