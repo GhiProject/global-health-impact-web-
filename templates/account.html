@@ -103,11 +103,16 @@ function loadAjax(operation) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 closeModal();
-                alert(operation+" Done");
+                
+                document.write(xhr.response);
+                
+
             }
         }
-        xhr.open("GET", operation, true);
+        console.log("This is the one");
+        console.log(xhr.open("GET", operation, true));
         xhr.send(null);
+
     }
 }
 
