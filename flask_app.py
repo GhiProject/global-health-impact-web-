@@ -735,37 +735,42 @@ def diseasepg(dyear, ddisease):
 
 @app.route('/reports')
 def reports():
-    repdata = g.db.execute('select * from reports2010')
-    repbar = g.db.execute('select * from reportsdetail2010')
+    try:
+        datasrc20102015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
+        df = pd.read_csv(datasrc, skiprows=1)
+        print(df)
+        repdata = g.db.execute('select * from reports2010')
+        repbar = g.db.execute('select * from reportsdetail2010')
+        reports2010 = repdata.fetchall()
+        reportsbar2010 = repbar.fetchall()
+        reportdict = []
+        reportbar2010 = []
+        print(reports2010)
+        print(reportsbar2010)
 
-    reports2010 = repdata.fetchall()
-    reportsbar2010 = repbar.fetchall()
-    reportdict = []
-    reportbar2010 = []
-    print(reports2010)
-    print(reportsbar2010)
-
-    for i in reports2010:
-        id = i[0]
-        year = i[1]
-        cname = str(i[2])
-        timpactscre = i[3]
-        rank = i[4]
-        numOfDis = i[5]
-        row = [id, year, cname, timpactscre, rank, numOfDis]
-        reportdict.append(row)
-    print(reportdict)
+        for i in reports2010:
+            id = i[0]
+            year = i[1]
+            cname = str(i[2])
+            timpactscre = i[3]
+            rank = i[4]
+            numOfDis = i[5]
+            row = [id, year, cname, timpactscre, rank, numOfDis]
+            reportdict.append(row)
+        print(reportdict)
 
 
-    for i in reportsbar2010:
-        _id = i[0]
-        year = i[1]
-        cname = str(i[2])
-        drug = str(i[3])
-        disease = str(i[4])
-        impact = i[5]
-        rowbar = [_id, year, cname, drug, disease, impact]
-        reportbar2010.append(rowbar)
+        for i in reportsbar2010:
+            _id = i[0]
+            year = i[1]
+            cname = str(i[2])
+            drug = str(i[3])
+            disease = str(i[4])
+            impact = i[5]
+            rowbar = [_id, year, cname, drug, disease, impact]
+            reportbar2010.append(rowbar)
+    except Exception as e:
+        print("ERROR in flask_py reports")    
     print(reportbar2010)
 
 
