@@ -1,73 +1,11 @@
 {% extends "layout.html" %}
 {% block title %}
 <title>Account Management</title>
-<style type="text/css">
-    #fadeload {
-    display: none;
-    position:absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background-color: #ababab;
-    z-index: 1001;
-    -moz-opacity: 0.8;
-    opacity: .70;
-    filter: alpha(opacity=80);
-}
 
-#modalload {
-    display: none;
-    position: absolute;
-    top: 45%;
-    left: 45%;
-    width: 150px;
-    height: 150px;
-    
-    
-   
-    
-    
-    z-index: 1002;
-    text-align:center;
-    
-}
+<head>
+        <link href="{{ url_for('static',filename='styleaccount.css') }}" rel="stylesheet">
+</head>
 
-.updating{
-    color:white;
-    font-size: 20px;
-    text-shadow: 0 4px 8px 0 rgba(0,0,0,0.9), 0 3px 10px 0 rgba(0,0,0,0.9);
-}
-
-.btnaccount{
-    background-color: white; /* Green */
-    border: 2px solid #0083C4;
-    color: blue;
-    padding: 15px 32px;
-    text-align: center;
-    font-size: 18px;
-    color: #000000;
-    font-family: 'Nunito', sans-serif;
-    display: inline-block;
-    
-    margin: 2px 2px;
-    cursor: pointer;
-    border-radius: 18px 0px 18px 0px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
-}
-
-.btnaccount:hover{
-    color:white;
-    background-color: #0083C4;
-    text-decoration:none;
-}
-
-
-#loader {
-    width: 140px;
-    height: 140px;
-}
-</style>
 {% endblock %}
 
 {% block frontimg %}
@@ -85,10 +23,10 @@ function closeModal() {
     document.getElementById('modalload').style.display = 'none';
     document.getElementById('fadeload').style.display = 'none';
 }
-        
+
+
 function loadAjax(operation) {
-    
-   
+
     document.body.innerHTML += "<div id='fadeload'></div><div id='modalload'><p class='updating'>Updating Database .. </p><img id='loader' src='{{ url_for('static',filename='img/loading2.gif') }}'/></div>";
 
     openModal();
@@ -103,6 +41,7 @@ function loadAjax(operation) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 closeModal();
+
                 
                 document.write(xhr.response);
                 
@@ -112,6 +51,7 @@ function loadAjax(operation) {
         console.log("This is the one");
         console.log(xhr.open("GET", operation, true));
         xhr.send(null);
+
 
     }
 }
@@ -124,15 +64,13 @@ function loadAjax(operation) {
 <div class="row">
     <div class="col-sm-6">
 
-        
-        
 
         <div class="contentbox">
             <p class="redtxt">Update: <b>Update Details</b></p>
 			<a class="btnaccount" href="javascript: void(0);loadAjax('/accountS');">Update</a>
             </div>
 	</div>
-     
+
     <div class="col-sm-6">
         <div class="contentbox">
             <p class="bluetxt">Revert: <b>Revert Details</b></p>

@@ -57,6 +57,7 @@
         <p class="txtcontent">The Global Health Impact Drug Index measures the impact of drugs used to treat different diseases. These diseases include HIV/AIDS, TB, malaria, lymphatic filariasis, onchoriasis, schistosomiasis, hookworm, ringworm, and whipworm. Three aspects are taken into consideration when determining drug scores: The need for several important drugs in each country, the drugs’ effectiveness, and the number of people that can access them. On the Drug Index page, you see the proportional impact of drugs for each disease. For additional information, please see About the Index and Methodology.</p>
     </div>
     <div class="col-sm-6">
+        <div class="firstPieChart">
         <p class="bluetxt" style="font-size:26px; !important">Proportion of Disease Burden Alleviated by Individual Drugs</p>
         <div class="piewrap">
             <div id="piediv" class="piechart">
@@ -74,10 +75,12 @@
                 {% endfor %}
             </table>
         </div>
+        </div>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-6">
+         <div class="contentbox">
         <p class="bluetxt" style="font-size:26px; !important">Global Drug Impact Scores</p>
         <div id="chart_div">
             {% for drug in impactpie %}
@@ -88,6 +91,7 @@
             {% endfor %}
             </div><br>
     </div>
+         </div>
     <div class="col-sm-6">
         <p class="bluetxt" style="font-size:26px; !important">Drug Impact Score</p>
         <div class="piewrap">

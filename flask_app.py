@@ -1413,13 +1413,14 @@ def company():
             color = compcolors[colcnt]
             #color=row[3]
             colcnt += 1
-            xyz = [comp,daly,disease,color]
+            actualNumDaly=row[1]
+            xyz = [comp,daly,disease,color, actualNumDaly]
             bardata.append(xyz)
 
     g.db.close()
     url = name.lower()
     speclocate = [year,name,url]
-    print (piedata1)
+    print (bardata)
     return render_template('company.html', data1=piedata2, data2=piedata1,name=name, navsub=2, showindex=1, pielab1=pielab1, pielab2=pielab2, bardata=bardata, comptype = 0, speclocate = speclocate, scrolling=1)
 
 @app.route('/index/company/manufacturer/<year>/<disease>')
@@ -1530,7 +1531,8 @@ def companyindx(year,disease):
                 color = compcolors[colcnt]
                 # color = row[3]
                 colcnt += 1
-                xyz = [comp, daly, disease, color]
+                actualNumDaly=row[1]
+                xyz = [comp, daly, disease, color, actualNumDaly]
                 bardata.append(xyz)
             # -----------------------------------------------------------------------------------------------------------------------------------------
             g.db.close()
@@ -1695,7 +1697,8 @@ def companyindx(year,disease):
         color = compcolors[colcnt]
         #color = row[3]
         colcnt += 1
-        xyz = [comp,daly,disease,color]
+        actualNumDaly = row[1]
+        xyz = [comp,daly,disease,color,actualNumDaly]
         bardata.append(xyz)
 #-----------------------------------------------------------------------------------------------------------------------------------------
     g.db.close()
@@ -1794,6 +1797,7 @@ def patent(year,disease):
             patent2.append(row)
     specname = disease
     specname[0].upper()
+    print(year)
     speclocate = [year,specname,disease]
     pielabb1 = []
     lablist1 = []
@@ -1827,6 +1831,7 @@ def patent(year,disease):
         comp = k[0]
         score = k[1]
         color = "#"+k[2]
+        #shortcomp = comp[0:10]
 
         labit.append(comp)
         labit.append(comp)
@@ -1845,6 +1850,7 @@ def patent(year,disease):
                 pielabb2.append(labrow)
                 labrow = []
                 xx = 0
+    print(patent2)
     return render_template('company.html', navsub=2, showindex=1, comptype = 1, speclocate = speclocate, scrolling=1, patent1 = patent1, patent2 = patent2, pielabb1 = pielabb1, pielabb2 = pielabb2)
 
 @app.route('/account')

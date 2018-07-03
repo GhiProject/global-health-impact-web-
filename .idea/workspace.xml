@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b54f63a3-daf4-4582-8ad5-8c0cdf935944" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/global-health-impact-web.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/global-health-impact-web.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/styleaccount.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flask_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/flask_app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ghi.db" beforeDir="false" afterPath="$PROJECT_DIR$/ghi.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/background1_edit.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/stylesheet.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/stylesheet.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/account.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/company.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/company.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/country.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/country.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/disease.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/disease.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/drug.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/drug.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/reports.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/reports.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,17 +26,26 @@
       <file leaf-file-name="flask_app.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/flask_app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="769" column="78" selection-start-line="769" selection-start-column="78" selection-end-line="769" selection-end-column="78" />
+            <state relative-caret-position="31399">
+              <caret line="1853" selection-start-line="1853" selection-end-line="1853" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reports.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="stylesheet.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/stylesheet.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="11747">
+              <caret line="691" selection-start-line="691" selection-end-line="691" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="reports.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/reports.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="128" column="319" selection-start-line="128" selection-start-column="319" selection-end-line="128" selection-end-column="319" />
+            <state relative-caret-position="271">
+              <caret line="345" column="8" selection-start-line="345" selection-start-column="8" selection-end-line="345" selection-end-column="8" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
@@ -50,10 +62,69 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="company.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="company.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/company.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2176" />
+            <state relative-caret-position="289">
+              <caret line="249" column="65" lean-forward="true" selection-start-line="249" selection-start-column="65" selection-end-line="249" selection-end-column="65" />
+              <folding>
+                <element signature="e#4847#4881#0" expanded="true" />
+                <element signature="e#5134#5174#0" expanded="true" />
+                <element signature="e#5245#5265#0" expanded="true" />
+                <element signature="e#5364#5408#0" expanded="true" />
+                <element signature="e#5658#5702#0" expanded="true" />
+                <element signature="e#5976#6020#0" expanded="true" />
+                <element signature="e#6241#6286#0" expanded="true" />
+                <element signature="e#6654#6688#0" expanded="true" />
+                <element signature="e#6862#6923#0" expanded="true" />
+                <element signature="e#7025#7146#0" expanded="true" />
+                <element signature="e#7340#7374#0" expanded="true" />
+                <element signature="e#7574#7614#0" expanded="true" />
+                <element signature="e#7685#7705#0" expanded="true" />
+                <element signature="e#7775#7819#0" expanded="true" />
+                <element signature="e#8014#8058#0" expanded="true" />
+                <element signature="e#8253#8297#0" expanded="true" />
+                <element signature="e#8492#8537#0" expanded="true" />
+                <element signature="e#14354#14387#0" expanded="true" />
+                <element signature="e#15178#15212#0" expanded="true" />
+                <element signature="e#15464#15504#0" expanded="true" />
+                <element signature="e#15568#15588#0" expanded="true" />
+                <element signature="e#15705#15749#0" expanded="true" />
+                <element signature="e#16155#16189#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="companydb.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/companydb.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="10081">
+              <caret line="595" selection-start-line="595" selection-end-line="595" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="map-label.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/map-label.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="account.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/account.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="36" column="10" selection-end-line="81" />
+            </state>
           </provider>
         </entry>
       </file>
@@ -62,18 +133,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
               <caret line="13" column="41" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="diseasealldb.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/diseasealldb.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1955">
-              <caret line="116" selection-start-line="116" selection-end-line="116" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -160,7 +219,7 @@
       <file leaf-file-name="about.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/about.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
+            <state relative-caret-position="476">
               <caret line="28" column="57" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
             </state>
           </provider>
@@ -186,6 +245,14 @@
       <find>row[</find>
       <find>of</find>
       <find>loss of</find>
+      <find>year</find>
+      <find>data</find>
+      <find>chart</find>
+      <find>patent</find>
+      <find>OnSelectedIndexChange</find>
+      <find>balloon</find>
+      <find>patent2</find>
+      <find>head</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -197,7 +264,11 @@
         <option value="$PROJECT_DIR$/diseasealldb.py" />
         <option value="$PROJECT_DIR$/diseasedb.py" />
         <option value="$PROJECT_DIR$/templates/disease.html" />
+        <option value="$PROJECT_DIR$/templates/account.html" />
+        <option value="$PROJECT_DIR$/static/stylesheet.css" />
+        <option value="$PROJECT_DIR$/companydb.py" />
         <option value="$PROJECT_DIR$/flask_app.py" />
+        <option value="$PROJECT_DIR$/templates/company.html" />
         <option value="$PROJECT_DIR$/templates/reports.html" />
       </list>
     </option>
@@ -212,6 +283,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -222,18 +294,22 @@
             <path>
               <item name="global-health-impact-web-" type="b2602c69:ProjectViewProjectNode" />
               <item name="global-health-impact-web-" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="global-health-impact-web-" type="b2602c69:ProjectViewProjectNode" />
+              <item name="global-health-impact-web-" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -310,6 +386,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1727672" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -322,12 +399,12 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3608903" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -356,8 +433,13 @@
           <line>771</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/flask_app.py</url>
+          <line>1853</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="23" />
+      <option name="time" value="24" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -366,10 +448,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/Python27/Lib/site-packages/flask/app.py" />
-    <entry file="file://C:/Python27/Lib/BaseHTTPServer.py" />
-    <entry file="file://C:/Python27/Lib/site-packages/werkzeug/serving.py" />
-    <entry file="file://C:/Python27/Lib/SocketServer.py" />
     <entry file="file://$PROJECT_DIR$/flask_app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -738,9 +816,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1955">
           <caret line="116" selection-start-line="116" selection-end-line="116" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -830,22 +905,87 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/about.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
+        <state relative-caret-position="476">
           <caret line="28" column="57" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/map-label.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/stylesheet.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11747">
+          <caret line="691" selection-start-line="691" selection-end-line="691" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/companydb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10081">
+          <caret line="595" selection-start-line="595" selection-end-line="595" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/flask_app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="769" column="78" selection-start-line="769" selection-start-column="78" selection-end-line="769" selection-end-column="78" />
+        <state relative-caret-position="31399">
+          <caret line="1853" selection-start-line="1853" selection-end-line="1853" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/account.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="10" selection-end-line="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/company.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="249" column="65" lean-forward="true" selection-start-line="249" selection-start-column="65" selection-end-line="249" selection-end-column="65" />
+          <folding>
+            <element signature="e#4847#4881#0" expanded="true" />
+            <element signature="e#5134#5174#0" expanded="true" />
+            <element signature="e#5245#5265#0" expanded="true" />
+            <element signature="e#5364#5408#0" expanded="true" />
+            <element signature="e#5658#5702#0" expanded="true" />
+            <element signature="e#5976#6020#0" expanded="true" />
+            <element signature="e#6241#6286#0" expanded="true" />
+            <element signature="e#6654#6688#0" expanded="true" />
+            <element signature="e#6862#6923#0" expanded="true" />
+            <element signature="e#7025#7146#0" expanded="true" />
+            <element signature="e#7340#7374#0" expanded="true" />
+            <element signature="e#7574#7614#0" expanded="true" />
+            <element signature="e#7685#7705#0" expanded="true" />
+            <element signature="e#7775#7819#0" expanded="true" />
+            <element signature="e#8014#8058#0" expanded="true" />
+            <element signature="e#8253#8297#0" expanded="true" />
+            <element signature="e#8492#8537#0" expanded="true" />
+            <element signature="e#14354#14387#0" expanded="true" />
+            <element signature="e#15178#15212#0" expanded="true" />
+            <element signature="e#15464#15504#0" expanded="true" />
+            <element signature="e#15568#15588#0" expanded="true" />
+            <element signature="e#15705#15749#0" expanded="true" />
+            <element signature="e#16155#16189#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/reports.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="128" column="319" selection-start-line="128" selection-start-column="319" selection-end-line="128" selection-end-column="319" />
+        <state relative-caret-position="271">
+          <caret line="345" column="8" selection-start-line="345" selection-start-column="8" selection-end-line="345" selection-end-column="8" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
@@ -859,11 +999,6 @@
             <element signature="n#style#0;n#div#1;n#div#2;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
           </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/company.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2176" />
       </provider>
     </entry>
   </component>

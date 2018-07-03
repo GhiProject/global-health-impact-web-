@@ -108,7 +108,7 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="contentbox">
+        <div class="firstPieChart">
             <p class="bluetxt" style="font-size:26px; !important">Proportion of Global Disease Burden Alleviated by Originator Company’s Drugs</p>
             <div class="piewrap">
                 <div class="piechart" id="manupie1"></div>
@@ -148,7 +148,7 @@
             <div id="chart_div">
                 {% for row in bardata %}
                 <a onclick="">
-                    <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';"><a data-balloon="{{ row.1}}" data-balloon-pos="right">{{ row.0 }}</a></div>
+                    <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';"><a data-balloon="{{ row.4}}" data-balloon-pos="right">{{ row.0 }}</a></div>
                     <div style="width: {{ row.1 }}%;background-color:{{ row.3 }};height: 10px;display:inline-block;font-size:0;margin-right:-4px;"></div>
                 </a>
                 {% endfor %}
@@ -236,6 +236,24 @@ Of course, some companies may raise their scores by simply acquiring the most ef
     var chart2 = new google.visualization.PieChart(document.getElementById('patpie2'));
     chart1.draw(data1, options1);
     chart2.draw(data2, options2);
+
+    function OnSelectedIndexChange()
+    {
+        var patentdata = {{patent2 | safe}}
+        console.log(patentdata)
+        if (document.getElementById('selectYear').value == "5"){
+          alert("5");
+        }
+        if (document.getElementById('selectYear').value == "10"){
+          alert("10");
+        }
+        if (document.getElementById('selectYear').value == "15"){
+          alert("15");
+        }
+        if (document.getElementById('selectYear').value == "20"){
+          alert("20");
+        }
+    }
   };
 </script>
 <script type="text/javascript">
@@ -276,11 +294,17 @@ Of course, some companies may raise their scores by simply acquiring the most ef
         <div class="contentbox">
             <p class="bluetxt" style="font-size:26px; !important">Patent Holders’ Total Drug Scores</p>
             <div id="chart_div">
+                <select id = selectYear onChange="OnSelectedIndexChange()">
+                    <option value="5">Past 5 years</option>
+                    <option value="10">Past 10 years</option>
+                    <option value="15">Past 15 years</option>
+                    <option value="20">Past 20 years</option>
+                </select>
                 {% for comp in patent2 %}
-                <a onclick="bargoclick({{ loop.index }});" title="{{ comp.0 }}: {{ comp.1 }}">
-                    <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';">{{ comp.0 }}</div>
+
+                <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';"><a data-balloon="{{ comp.1 }}" data-balloon-pos="right">{{ comp.0 }}</a></div>
                     <div style="width: {{ comp.3 }}%;background-color:#{{ comp.2 }};height: 10px;display:inline-block;font-size:0;margin-right:-4px;"></div>
-                </a>
+
                 {% endfor %}
             </div>
         </div>
