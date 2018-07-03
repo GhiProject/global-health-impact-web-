@@ -1,28 +1,22 @@
-
 {% extends "layout.html" %}
 {% block title %}
 <style type="text/css">
-
   .row{
     font-family: 'Nunito', sans-serif;
   }
-
   .coll {
     padding-left:20px;
     padding-right:20px;
   }
   .companyname a{
-
     color:black;
     text-decoration: none;
 }
-
 .companyname a:hover{
     color:red;
     cursor: pointer;
     text-decoration: none;
 }
-
 #company_head{
   font-size: 25px;
   color: #0083c4;
@@ -54,10 +48,7 @@
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-
     var colorval;
-
-
     function getColor(colorvalue)
     {
       if(colorvalue.includes("Malaria"))
@@ -95,84 +86,87 @@
     }
 
     var reportsdata = {{report2010 | safe}}
-
     var reportdetail = {{reportdetail2010 | safe }}
-
     google.charts.load('upcoming', {'packages':['geochart','corechart']});
     google.charts.setOnLoadCallback(drawMap);
+
     function drawMap() {
-      row = reportdetail[0];
-      rowvalue = reportsdata[0];
-      getColor(row[4]);
-      var bardata = new google.visualization.DataTable();
-      bardata.addColumn('string','Disease');
-      bardata.addColumn('number','Impact');
-      bardata.addColumn({type: 'string', role: 'style'});
-      bardata.addRow([row[4],row[5],"color: colorval"]);
-       var baroptions = {
-             legend:'none',
-             top: 0,
-             width: 400,
-             left: 200,
-             animation:{
-                 startup: true,
-                 duration: 1000,
-                 easing: 'out',
-             }
-         };
-      var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
-      barchart.draw(bardata,baroptions);
-      var content_data = row[2]+" is ranked in "+row[4]+" place in our index."+row[2]+"’s drugs have a total impact score of "+row[3]+". Of that score, <<disease1percent>>%, or <<disease1impact>>, comes from treating <<disease1>> and <<disease2percent>>%, or <<disease2impact>>, comes from treating <<disease2>>."+row[2]+" receives credit for <<numberofdrugsdisease1>> treatments against <<disease1>>, <<drug1disease1>> and <<drug2disease1>> [etc. if more than one exist]. These <<numberofdrugsdisease1>> <<disease1>> drugs are responsible for averting the loss of <<percentdalyscompanydisease1>> of the worldwide DALYs that we estimate would have been lost due to <<disease1>> in <<year>> in the absence of effective treatment [similarly for other diseases]. "+row[2]+"’s drug portfolio placed it <<companyrankdisease1>> in terms of total averted DALYs for <<disease1>>."+row[2]+" also receives credit for <<numberofdrugsdisease2>> <<disease2>> drugs, <<drug1disease2>> and <<drug2disease2>>. "+row[2]+"’s <<disease2>> drug portfolio helped to prevent <<percentdalyscompanydisease2>> of the DALYs that we estimate would have been lost to <<disease2>> in <<year>>. "+row[2]+"’s drug portfolio placed it <<companyrankdisease2>> in terms of total averted DALYs for <<disease2>>.<<drughighestscore>> for <<diseasehighestscore>> contributes the most to <<company>>’s score. Drug <<drughighestefficacy> has the <<rankefficacy>> greatest efficacy, <<ranktreatmentpercentage>> greatest treatment percentage and disease <<disease1>> accounts for <<percentofdesiseseburden>> percent of the global burden of disease that we estimate would be lost without treatment (out of all the diseases in our model).";
+        var rownum = 1;
 
-        document.getElementById('company_head').innerHTML = row[2];
-            document.getElementById('cont').innerHTML = content_data;
-      document.getElementById('rptScore').innerHTML = rowvalue[3];
-      document.getElementById('rptDrug').innerHTML = row[3];
-      document.getElementById('rptDisease').innerHTML = row[4];
-      document.getElementById(row[0]).style.color = "#0083c4";
-      document.getElementById(row[0]).style.fontWeight = "700"
-      console.log(rowvalue[2]);
-      //document.getElementById('cntname').innerHTML = rowvalue[2];
-    }
+            console.log(reportsdata);
+            console.log(reportdetail);
+            console.log("--------------Click Called ---------------------");
+            document.getElementById('rptDrug').innerHTML = "";
+            document.getElementById('rptDisease').innerHTML = "";
 
-    function rptClick(rownum){
-          document.getElementById('rptDrug').innerHTML = "";
-          document.getElementById('rptDisease').innerHTML = "";
-           // alert("Inside"+ rownum);
             var ii = 0;
             var j;
-             var count = Object.keys(reportdetail).length;
-             console.log(count);
+            var count = Object.keys(reportdetail).length;
+
+             var numberofdisease=0;
+             var diseasepara = '';
+
              var bardata = new google.visualization.DataTable();
              bardata.addColumn('string','Disease');
              bardata.addColumn('number','Impact');
              bardata.addColumn({type: 'string', role: 'style'});
-             console.log("-----------------------------------------");
+
+             var para2 = "Of that score, ";
              for(ii = 0; ii < count; ii++)
              {
-                    console.log(reportdetail[ii][0])
+
                     if(rownum == reportdetail[ii][0])
                     {
+                      numberofdisease = numberofdisease + 1;
+
+                      console.log(reportdetail);
+                      console.log(reportsdata);
+
+                      para2 = para2 +" "+reportdetail[ii][6]+"% or "+reportdetail[ii][5]+" comes from treating "+reportdetail[ii][4]+". ";
+
+
+
+                         diseasepara = diseasepara+reportdetail[ii][2]+" receives credits for "+reportsdata[rownum-1][5]+" treatments against "+reportdetail[ii][4]+", "+reportdetail[ii][3]+" These"+reportsdata[rownum-1][5]+" "+reportdetail[ii][4]+"drugs are responsible for averting the loss of "+reportdetail[ii][8]+" of the worldwide DALYs that we estimate would have been lost due to "+reportdetail[ii][4]+" in "+reportdetail[ii][1]+"in the absense of effective treatment. ";
+
+
+                      if(numberofdisease === 2)
+                      {
+                          var disease1para = reportdetail[ii][2]+"’s drug portfolio placed it "+reportdetail[ii-1][7]+" in terms of total averted DALYs for"+reportdetail[ii-1][4]+". "+reportdetail[ii][2]+" also receives credit for "+reportsdata[rownum-1][5]+" "+reportdetail[ii][4]+" drugs, "+reportdetail[ii][3]+" ."+reportdetail[ii][2]+"'s "+reportdetail[ii][4]+" drug portfolio helped to prevent "+reportdetail[ii][8]+" of the DALYs that we estimate would have been lost to "+reportdetail[ii][4]+" in"+reportdetail[ii][1]+". "+reportdetail[ii][2]+"'s drug portfolio placed it "+reportdetail[ii][7]+" in terms of total averted DALYs for "+reportdetail[ii][4]+". ";
+                      }
+
+                    console.log("--------------------------This is my data---------------");
+                    console.log(para2);
+                    console.log(diseasepara);
+                    console.log(disease1para);
+                    console.log("---------------------------------------------------------");
+
                     row = reportdetail[ii];
                     rowvalue = reportsdata[rownum-1];
                     console.log("This is the Drug : "+row[3]);
                     console.log("This is the disease : "+row[4]);
                     console.log("This is the impact score : "+row[5]);
                     getColor(row[4]);
-                     bardata.addRow([row[4],row[5],colorval]);
+                    document.getElementById(reportdetail[ii][0]).style.color = "#0083c4";
+                    document.getElementById(reportdetail[ii][0]).style.fontWeight = "700";
+                    console.log(reportdetail[ii][0]+"="+reportdetail[ii][2]+" BLUE");
+                    console.log("Crucial data");
+                    console.log(row[4]+" "+row[5]);
+                    bardata.addRow([row[4],Number(row[5]),colorval]);
                     document.getElementById('rptDrug').innerHTML += " " + row[3];
                     document.getElementById('rptDisease').innerHTML += " " + row[4];
-                    document.getElementById(reportdetail[ii][0]).style.color = "#0083c4";
-                    document.getElementById(reportdetail[ii][0]).style.fontWeight = "700"
+
+
                     }
                     else
                     {
                       document.getElementById(reportdetail[ii][0]).style.color = "#000000";
-                      document.getElementById(reportdetail[ii][0]).style.fontWeight = "400"
+                      document.getElementById(reportdetail[ii][0]).style.fontWeight = "400";
+                      console.log(reportdetail[ii][0]+"="+reportdetail[ii][2]+" BLACK");
                     }
              }
-             console.log("-----------------------------------------");
-               var baroptions = {
+
+               var baroptions =
+               {
                     legend:'none',
                     top: 0,
                     width: 400,
@@ -181,25 +175,143 @@
                         duration: 1000,
                         easing: 'out',
                     },
-                    chartArea: {
-    backgroundColor: {
-        stroke: '#4c4c4c',
-        strokeWidth: 1
-    },
-    
-}
-                };
+                    chartArea:
+                    {
+                        backgroundColor:
+                        {
+                        stroke: '#4c4c4c',
+                        strokeWidth: 1
+                        },
+
+                    }
+               };
+
             var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
             barchart.draw(bardata,baroptions);
+            if(numberofdisease === 1)
+            {
+             var content_data = reportsdata[rownum-1][2]+" is ranked in "+reportsdata[rownum-1][4]+" place in our index."+reportsdata[rownum-1][2]+"’s drugs have a total impact score of "+reportsdata[rownum-1][3]+" "+para2+" "+diseasepara+". ";
 
-            var content_data = row[2]+" is ranked in "+row[4]+" place in our index."+row[2]+"’s drugs have a total impact score of "+row[3]+". Of that score, <<disease1percent>>%, or <<disease1impact>>, comes from treating <<disease1>> and <<disease2percent>>%, or <<disease2impact>>, comes from treating <<disease2>>."+row[2]+" receives credit for <<numberofdrugsdisease1>> treatments against <<disease1>>, <<drug1disease1>> and <<drug2disease1>> [etc. if more than one exist]. These <<numberofdrugsdisease1>> <<disease1>> drugs are responsible for averting the loss of <<percentdalyscompanydisease1>> of the worldwide DALYs that we estimate would have been lost due to <<disease1>> in <<year>> in the absence of effective treatment [similarly for other diseases]. "+row[2]+"’s drug portfolio placed it <<companyrankdisease1>> in terms of total averted DALYs for <<disease1>>."+row[2]+" also receives credit for <<numberofdrugsdisease2>> <<disease2>> drugs, <<drug1disease2>> and <<drug2disease2>>. "+row[2]+"’s <<disease2>> drug portfolio helped to prevent <<percentdalyscompanydisease2>> of the DALYs that we estimate would have been lost to <<disease2>> in <<year>>. "+row[2]+"’s drug portfolio placed it <<companyrankdisease2>> in terms of total averted DALYs for <<disease2>>.<<drughighestscore>> for <<diseasehighestscore>> contributes the most to <<company>>’s score. Drug <<drughighestefficacy> has the <<rankefficacy>> greatest efficacy, <<ranktreatmentpercentage>> greatest treatment percentage and disease <<disease1>> accounts for <<percentofdesiseseburden>> percent of the global burden of disease that we estimate would be lost without treatment (out of all the diseases in our model).";
-
-
-            document.getElementById('company_head').innerHTML = row[2];
+            }
+            else
+            {
+            var content_data = reportsdata[rownum-1][2]+" is ranked in "+reportsdata[rownum-1][4]+" place in our index."+reportsdata[rownum-1][2]+"’s drugs have a total impact score of "+reportsdata[rownum-1][3]+" "+para2+" "+diseasepara+" "+disease1para;
+            }
+            document.getElementById('company_head').innerHTML = reportsdata[rownum-1][2];
             document.getElementById('cont').innerHTML = content_data;
             document.getElementById('rptScore').innerHTML = rowvalue[3];
             //document.getElementById('cntname').innerHTML = rowvalue[2];
+            console.log("--------------Click End ---------------------");
+        };
 
+    function rptClick(rownum){
+            console.log("--------------Click Called ---------------------");
+            document.getElementById('rptDrug').innerHTML = "";
+            document.getElementById('rptDisease').innerHTML = "";
+
+            var ii = 0;
+            var j;
+            var count = Object.keys(reportdetail).length;
+
+             var numberofdisease=0;
+             var diseasepara = '';
+
+             var bardata = new google.visualization.DataTable();
+             bardata.addColumn('string','Disease');
+             bardata.addColumn('number','Impact');
+             bardata.addColumn({type: 'string', role: 'style'});
+
+             var para2 = "Of that score, ";
+             for(ii = 0; ii < count; ii++)
+             {
+
+                    if(rownum == reportdetail[ii][0])
+                    {
+                      numberofdisease = numberofdisease + 1;
+
+                      console.log(reportdetail);
+                      console.log(reportsdata);
+
+                      para2 = para2 +" "+reportdetail[ii][6]+"% or "+reportdetail[ii][5]+" comes from treating "+reportdetail[ii][4]+". ";
+
+
+
+                         diseasepara = diseasepara+reportdetail[ii][2]+" receives credits for "+reportsdata[rownum-1][5]+" treatments against "+reportdetail[ii][4]+", "+reportdetail[ii][3]+" These"+reportsdata[rownum-1][5]+" "+reportdetail[ii][4]+"drugs are responsible for averting the loss of"+reportdetail[ii][8]+"of the worldwide DALYs that we estimate would have been lost due to "+reportdetail[ii][4]+" in "+reportdetail[ii][1]+"in the absense of effective treatment. ";
+
+
+                      if(numberofdisease === 2)
+                      {
+                          var disease1para = reportdetail[ii][2]+"’s drug portfolio placed it "+reportdetail[ii-1][7]+" in terms of total averted DALYs for"+reportdetail[ii-1][4]+". "+reportdetail[ii][2]+" also receives credit for "+reportsdata[rownum-1][5]+" "+reportdetail[ii][4]+" drugs, "+reportdetail[ii][3]+" ."+reportdetail[ii][2]+"'s "+reportdetail[ii][4]+" drug portfolio helped to prevent "+reportdetail[ii][8]+" of the DALYs that we estimate would have been lost to "+reportdetail[ii][4]+" in"+reportdetail[ii][1]+". "+reportdetail[ii][2]+"'s drug portfolio placed it "+reportdetail[ii][7]+" in terms of total averted DALYs for "+reportdetail[ii][4]+". ";
+                      }
+
+                    console.log("--------------------------This is my data---------------");
+                    console.log(para2);
+                    console.log(diseasepara);
+                    console.log(disease1para);
+                    console.log("---------------------------------------------------------");
+
+                    row = reportdetail[ii];
+                    rowvalue = reportsdata[rownum-1];
+                    console.log("This is the Drug : "+row[3]);
+                    console.log("This is the disease : "+row[4]);
+                    console.log("This is the impact score : "+row[5]);
+                    getColor(row[4]);
+                    document.getElementById(reportdetail[ii][0]).style.color = "#0083c4";
+                    document.getElementById(reportdetail[ii][0]).style.fontWeight = "700";
+                    console.log(reportdetail[ii][0]+"="+reportdetail[ii][2]+" BLUE");
+                    console.log("Crucial data");
+                    console.log(row[4]+" "+row[5]);
+                    bardata.addRow([row[4],Number(row[5]),colorval]);
+                    document.getElementById('rptDrug').innerHTML += " " + row[3];
+                    document.getElementById('rptDisease').innerHTML += " " + row[4];
+
+
+                    }
+                    else
+                    {
+                      document.getElementById(reportdetail[ii][0]).style.color = "#000000";
+                      document.getElementById(reportdetail[ii][0]).style.fontWeight = "400";
+                      console.log(reportdetail[ii][0]+"="+reportdetail[ii][2]+" BLACK");
+                    }
+             }
+
+               var baroptions =
+               {
+                    legend:'none',
+                    top: 0,
+                    width: 400,
+                    animation:{
+                        startup: true,
+                        duration: 1000,
+                        easing: 'out',
+                    },
+                    chartArea:
+                    {
+                        backgroundColor:
+                        {
+                        stroke: '#4c4c4c',
+                        strokeWidth: 1
+                        },
+
+                    }
+               };
+
+            var barchart = new google.visualization.BarChart(document.getElementById('horbars'));
+            barchart.draw(bardata,baroptions);
+            if(numberofdisease === 1)
+            {
+             var content_data = reportsdata[rownum-1][2]+" is ranked in "+reportsdata[rownum-1][4]+" place in our index."+reportsdata[rownum-1][2]+"’s drugs have a total impact score of "+reportsdata[rownum-1][3]+" "+para2+" "+diseasepara+". ";
+
+            }
+            else
+            {
+            var content_data = reportsdata[rownum-1][2]+" is ranked in "+reportsdata[rownum-1][4]+" place in our index."+reportsdata[rownum-1][2]+"’s drugs have a total impact score of "+reportsdata[rownum-1][3]+" "+para2+" "+diseasepara+" "+disease1para;
+            }
+            document.getElementById('company_head').innerHTML = reportsdata[rownum-1][2];
+            document.getElementById('cont').innerHTML = content_data;
+            document.getElementById('rptScore').innerHTML = rowvalue[3];
+            //document.getElementById('cntname').innerHTML = rowvalue[2];
+            console.log("--------------Click End ---------------------");
         };
 </script>
 
@@ -217,18 +329,18 @@
   </div>
 
 <!--End list of company-->
-<!--Company details with bar graph and paragraph-->   
+<!--Company details with bar graph and paragraph-->
 <!--Company details with bar graph and paragraph-->
   <div class="col-sm-6">
   <!--Company Name-->
     <div class="coll" id="company_head"> </div>
   <!--End Company Name-->
     </br>
-  <!--Paragraph about company -->  
-    <div class="coll" id="cont"></div>  
+  <!--Paragraph about company -->
+    <div class="coll" id="cont"></div>
   <!--End Paragraph about company-->
 
-  <!--Score details --> 
+  <!--Score details -->
   <div class="coll">
         <div style="width:250px;">
          <div style="width:50px; float:left;"><b> Score :</b> </div>
@@ -243,14 +355,14 @@
          <div style="width:200px; float:right;" id="rptDisease"></div>
         </div>
   </div>
-  <!--End score details-->      
-    
+  <!--End score details-->
+
 
     </br></br>
-    <!-- Bar Graph -->  
+    <!-- Bar Graph -->
          <div class="rgtpos" id="horbars" ></div>
-    <!-- End bar graph -->  
-    
+    <!-- End bar graph -->
+
   <!--End score details-->
 </div>
 </div>

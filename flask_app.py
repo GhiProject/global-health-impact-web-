@@ -736,9 +736,9 @@ def diseasepg(dyear, ddisease):
 @app.route('/reports')
 def reports():
     try:
-        datasrc20102015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
-        df = pd.read_csv(datasrc, skiprows=1)
-        print(df)
+        #datasrc20102015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
+        #df = pd.read_csv(datasrc, skiprows=1)
+        #print(df)
         repdata = g.db.execute('select * from reports2010')
         repbar = g.db.execute('select * from reportsdetail2010')
         reports2010 = repdata.fetchall()
@@ -767,7 +767,7 @@ def reports():
             drug = str(i[3])
             disease = str(i[4])
             impact = i[5]
-            rowbar = [_id, year, cname, drug, disease, impact]
+            rowbar = [_id, year, cname, drug, disease, impact, i[6], i[7], i[8]]
             reportbar2010.append(rowbar)
     except Exception as e:
         print("ERROR in flask_py reports")    
