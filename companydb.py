@@ -11,6 +11,7 @@ conn.execute('''DROP TABLE IF EXISTS patent2013''')
 conn.execute('''DROP TABLE IF EXISTS patent2015''')
 conn.execute('''DROP TABLE IF EXISTS manudis2015''')
 conn.execute('''DROP TABLE IF EXISTS manutot2015''')
+conn.execute('''DROP TABLE IF EXISTS temppatent2010''')
 
 conn.execute('''CREATE TABLE manudis
              (company text, disease text, daly2010 real, daly2013 real, color text)''')
@@ -28,6 +29,8 @@ conn.execute('''CREATE TABLE patent2013
             (company text, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, onchocerciasis real, lf real, total real, color text)''')
 conn.execute('''CREATE TABLE patent2015
             (company text, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, onchocerciasis real, lf real, total real, color text)''')
+conn.execute('''CREATE TABLE temppatent2010
+            (company text, year, tb real, malaria real, hiv real, roundworm real, hookworm real, whipworm real, schistosomiasis real, onchocerciasis real, lf real, total real, color text)''')
 
 #datasrc = 'https://docs.google.com/spreadsheets/d/1IBfN_3f-dG65YbLWQbkXojUxs2PlQyo7l04Ubz9kLkU/pub?gid=1560508440&single=true&output=csv'
 #datasrc20102015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
@@ -400,10 +403,90 @@ for j in range(11,21):
         unmet.append(temp)
 pat2010.append(unmet)
 colind = 0
+print(pat2010)
 for item in pat2010:
     item.append(colors[colind])
     colind+=1
     conn.execute(' insert into patent2010 values (?,?,?,?,?,?,?,?,?,?,?,?) ', item)
+#print(pat2010)
+
+
+
+oldrow = ['']
+pat2010 = []
+for i in range(1,43):
+    prow = []
+    comp = df.iloc[1,i]
+    if is_df_true.iloc[3, i] == True:
+        patyear = df.iloc[3,i]
+    else:
+        patyear = ''
+    print(prow)
+    print(comp)
+    print(patyear)
+    prow.append(comp)
+    prow.append(patyear)
+    for j in range(11,21):
+        if j == 11:
+            tb1 = cleanfloat(df.iloc[8,i])
+            tb2 = cleanfloat(df.iloc[9,i])
+            tb3 = cleanfloat(df.iloc[10,i])
+            tb=[tb1,tb2,tb3]
+            temp = (tb1+tb2+tb3)
+            prow.append(temp)
+        elif j == 12:
+            mal1 = cleanfloat(df.iloc[11,i])
+            mal2 = cleanfloat(df.iloc[12,i])
+            mal=[mal1,mal2]
+            temp = (mal1+mal2)
+            prow.append(temp)
+        elif j == 20:
+            total = cleanfloat(df.iloc[j,i])
+            prow.append(total)
+        else:
+            temp = df.iloc[j,i]
+            if isinstance(temp,float) == False and isinstance(temp,int) == False:
+                temp = float(temp.replace(',',''))
+            if temp != temp:
+                temp = 0
+            prow.append(temp)
+    pat2010.append(prow)
+unmet = ['Unmet Need']
+patyear = '1900'
+unmet.append(patyear)
+for j in range(11,21):
+    if j == 11:
+        #print(df.iloc[7,46])
+        tb1 = cleanfloat(df.iloc[8,45])
+        tb2 = cleanfloat(df.iloc[9,45])
+        tb3 = cleanfloat(df.iloc[10,45])
+        tb=[tb1,tb2,tb3]
+        temp = (tb1+tb2+tb3)
+        unmet.append(temp)
+    elif j == 12:
+        mal1 = cleanfloat(df.iloc[11,45])
+        mal2 = cleanfloat(df.iloc[12,45])
+        mal=[mal1,mal2]
+        temp = (mal1+mal2)
+        unmet.append(temp)
+    elif j == 20:
+        total = cleanfloat(df.iloc[j,45])
+        unmet.append(total)
+    else:
+        temp = df.iloc[j,45]
+        if isinstance(temp,float) == False and isinstance(temp,int) == False:
+            temp = float(temp.replace(',',''))
+        if temp != temp:
+            temp = 0
+        unmet.append(temp)
+pat2010.append(unmet)
+print(colors)
+print(pat2010)
+_colind = 0
+for item in pat2010:
+    item.append(colors[_colind])
+    _colind+=1
+    conn.execute(' insert into temppatent2010 values (?,?,?,?,?,?,?,?,?,?,?,?,?) ', item)
 #print(pat2010)
 
 

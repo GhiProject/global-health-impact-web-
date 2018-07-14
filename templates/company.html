@@ -55,6 +55,43 @@
     transform: translate(0, -50%); }
 
 
+
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+
 </style>
 <title>{% if comptype == 0 %}Manufacturer{% endif %}{% if comptype == 1 %}Patent Holder{% endif %} Index - Global Health Impact</title>
 
@@ -93,6 +130,8 @@
     chart1.draw(data1, options1);
     chart2.draw(data2, options2);
   };
+
+
 </script>
 <script type="text/javascript">
 
@@ -145,7 +184,7 @@
     <div class="col-sm-6">
         <div class="contentbox">
             <p class="bluetxt" style="font-size:26px; !important">Manufacturers’ Total Drug Scores</p>
-            <div id="chart_div">
+            <div id="chart_div_bar">
                 {% for row in bardata %}
                 <a onclick="">
                     <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';"><a data-balloon="{{ row.4}}" data-balloon-pos="right">{{ row.0 }}</a></div>
@@ -153,7 +192,12 @@
                 </a>
                 {% endfor %}
             </div>
-        </div>
+        <br>
+
+
+
+
+             </div>
     </div>
     <div class="col-sm-6">
         <div class="contentbox">
@@ -255,6 +299,79 @@ Of course, some companies may raise their scores by simply acquiring the most ef
         }
     }
   };
+   function updateSliderPatent(slideAmount) {
+        var sliderDiv = document.getElementById("sliderAmountPatent");
+
+        sliderDiv.innerHTML = slideAmount;
+        var bardata = {{patent2 | safe}};
+
+
+
+        var finallist = [];
+        var pointer = -1;
+        for(var i=0; i<bardata.length; i++)
+        {
+            var row = bardata[i];
+
+
+
+          if(Number(row[3]) <= Number(slideAmount))
+            {
+
+                pointer =  contains(finallist,row);
+
+                if(pointer === -1)
+                {
+                    finallist.push(row);
+                }
+                else
+                {
+                    finallist[pointer][4] = finallist[pointer][4] + row[4];
+
+                }
+
+            }
+
+        }
+
+        var intext = "";
+
+        for(var i=0; i<finallist.length; i++)
+        {
+            var row = finallist[i];
+
+
+
+          if(Number(row[3]) <= Number(slideAmount))
+            {
+
+            intext = intext + "<a onclick=''><div id='' style='padding-top: 2px; font-family: 'Nunito','sans-serif';'><a data-balloon='"+row[4]+"' data-balloon-pos='right'>"+row[0]+"</a></div><div style='width:"+row[4]+"%;background-color:#"+row[2]+";height: 10px;'></div></a>";
+            console.log(intext);
+            }
+
+        }
+
+        document.getElementById('chart_div').innerHTML = intext;
+
+    }
+
+    function contains(arr, obj){
+        var i=0;
+
+        console.log(arr);
+        console.log(obj);
+
+        while(i<arr.length)
+        {
+            if(arr[i][0] === obj[0])
+            {
+                return i;
+            }
+            i++;
+        }
+
+        return -1;
+    }
 </script>
 <script type="text/javascript">
 
@@ -294,19 +411,20 @@ Of course, some companies may raise their scores by simply acquiring the most ef
         <div class="contentbox">
             <p class="bluetxt" style="font-size:26px; !important">Patent Holders’ Total Drug Scores</p>
             <div id="chart_div">
-                <select id = selectYear onChange="OnSelectedIndexChange()">
-                    <option value="5">Past 5 years</option>
-                    <option value="10">Past 10 years</option>
-                    <option value="15">Past 15 years</option>
-                    <option value="20">Past 20 years</option>
-                </select>
+
                 {% for comp in patent2 %}
 
                 <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';"><a data-balloon="{{ comp.1 }}" data-balloon-pos="right">{{ comp.0 }}</a></div>
-                    <div style="width: {{ comp.3 }}%;background-color:#{{ comp.2 }};height: 10px;display:inline-block;font-size:0;margin-right:-4px;"></div>
+                    <div style="width: {{ comp.4 }}%;background-color:#{{ comp.2 }};height: 10px;display:inline-block;font-size:0;margin-right:-4px;"></div>
 
                 {% endfor %}
             </div>
+               <br>
+      <input id="slide" class="slider" type="range" min="1950" max="2018" step="1"  value="2018" oninput="updateSliderPatent(this.value)">
+
+<div id="sliderAmountPatent">
+    2018
+</div>
         </div>
     </div>
     <div class="col-sm-6">
