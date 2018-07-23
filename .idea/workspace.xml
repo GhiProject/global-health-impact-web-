@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b54f63a3-daf4-4582-8ad5-8c0cdf935944" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ORS_Reports.csv" beforeDir="false" afterPath="$PROJECT_DIR$/ORS_Reports.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/companydb.py" beforeDir="false" afterPath="$PROJECT_DIR$/companydb.py" afterDir="false" />
+    <list default="true" id="b54f63a3-daf4-4582-8ad5-8c0cdf935944" name="Default" comment="Merge remote-tracking branch 'remotes/upstream/master'&#10;&#10;# Conflicts:&#10;#&#9;flask_app.py">
       <change beforePath="$PROJECT_DIR$/flask_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/flask_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ghi.db" beforeDir="false" afterPath="$PROJECT_DIR$/ghi.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/styleaccount.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styleaccount.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/stylesheet.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/stylesheet.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/company.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/company.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/reports.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/reports.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,8 +17,8 @@
       <file leaf-file-name="flask_app.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/flask_app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="1070" column="20" lean-forward="true" selection-start-line="1070" selection-start-column="20" selection-end-line="1070" selection-end-column="20" />
+            <state relative-caret-position="192">
+              <caret line="1779" column="10" selection-start-line="1779" selection-start-column="10" selection-end-line="1779" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -69,12 +62,13 @@
       <file leaf-file-name="reports.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/reports.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="115" column="253" selection-start-line="115" selection-start-column="253" selection-end-line="115" selection-end-column="253" />
+            <state relative-caret-position="124">
+              <caret line="333" column="71" selection-start-line="333" selection-start-column="71" selection-end-line="333" selection-end-column="71" />
               <folding>
                 <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#0;n#div#1;n#div#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#1;n#div#2;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#1;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
@@ -137,8 +131,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>reportdata</find>
-      <find>impact score of</find>
       <find>report</find>
       <find>row</find>
       <find>row[</find>
@@ -156,7 +148,6 @@
       <find>/company</find>
       <find>chart</find>
       <find>these</find>
-      <find>patent</find>
       <find>/account</find>
       <find>/country</find>
       <find>bardata</find>
@@ -167,6 +158,9 @@
       <find>ranked</find>
       <find>treatments</find>
       <find>in the ab</find>
+      <find>treatme</find>
+      <find>patent</find>
+      <find>cont</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -186,9 +180,9 @@
         <option value="$PROJECT_DIR$/templates/account.html" />
         <option value="$PROJECT_DIR$/static/styleaccount.css" />
         <option value="$PROJECT_DIR$/companydb.py" />
-        <option value="$PROJECT_DIR$/flask_app.py" />
         <option value="$PROJECT_DIR$/templates/company.html" />
         <option value="$PROJECT_DIR$/static/stylesheet.css" />
+        <option value="$PROJECT_DIR$/flask_app.py" />
         <option value="$PROJECT_DIR$/templates/reports.html" />
       </list>
     </option>
@@ -378,13 +372,13 @@
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.26427525" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.3290938" />
-      <window_info anchor="bottom" id="Python Console" order="11" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.3290938" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28616852" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3608903" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -394,25 +388,6 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />
     </layout>
-    <layout-to-restore>
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28616852" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26427525" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3608903" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="10" weight="0.3290938" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -446,7 +421,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/flask_app.py</url>
-          <line>1854</line>
+          <line>1855</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
@@ -605,13 +580,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/flask_app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="1070" column="20" lean-forward="true" selection-start-line="1070" selection-start-column="20" selection-end-line="1070" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/country.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
@@ -656,14 +624,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/flask_app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="1779" column="10" selection-start-line="1779" selection-start-column="10" selection-end-line="1779" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/reports.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="115" column="253" selection-start-line="115" selection-start-column="253" selection-end-line="115" selection-end-column="253" />
+        <state relative-caret-position="124">
+          <caret line="333" column="71" selection-start-line="333" selection-start-column="71" selection-end-line="333" selection-end-column="71" />
           <folding>
             <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#div#1;n#div#0;n#div#1;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#2;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#div#0;n#div#2;n#div#1;n#div#2;n#!!top" expanded="true" />

@@ -1777,6 +1777,7 @@ def patent(year,disease):
         elif disease == 'lf':
             dat = g.db.execute(' select company, lf, color from patent2015 ')
     data = dat.fetchall()
+    print()
     patent1 = []
     patent2 = []
     for j in data:
