@@ -659,3 +659,7 @@ body {
     margin-right: 5px;
     margin-bottom: 5px;
 }
+
+/* Fix for Google Charts flickering toolbar on-hover */
+svg > g:last-child > g:last-child { pointer-events: none }
+div.google-visualization-tooltip { pointer-events: none }
