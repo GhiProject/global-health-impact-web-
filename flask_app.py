@@ -739,11 +739,11 @@ def reports():
         #datasrc20102015 = 'https://docs.google.com/spreadsheets/d/1vwMReqs8G2jK-Cx2_MWKn85MlNjnQK-UR3Q8vZ_pPNk/pub?gid=1560508440&single=true&output=csv'
         #df = pd.read_csv(datasrc, skiprows=1)
         #print(df)
-        repdata = g.db.execute('select * from reports2010')
-        repbar = g.db.execute('select * from reportsdetail2010')
-        reports2010 = repdata.fetchall()
-        reportsbar2010 = repbar.fetchall()
-        reportdict = []
+        repdata2010 = g.db.execute('select * from reports2010')
+        repbar2010 = g.db.execute('select * from reportsdetail2010')
+        reports2010 = repdata2010.fetchall()
+        reportsbar2010 = repbar2010.fetchall()
+        reportdict2010 = []
         reportbar2010 = []
         print(reports2010)
         print(reportsbar2010)
@@ -756,8 +756,8 @@ def reports():
             rank = i[4]
             numOfDis = i[5]
             row = [id, year, cname, timpactscre, rank, numOfDis]
-            reportdict.append(row)
-        print(reportdict)
+            reportdict2010.append(row)
+        print(reportdict2010)
 
 
         for i in reportsbar2010:
@@ -773,8 +773,43 @@ def reports():
         print("ERROR in flask_py reports")    
     print(reportbar2010)
 
+    try:
+        repdata2013 = g.db.execute('select * from reports2013')
+        repbar2013 = g.db.execute('select * from reportsdetail2013')
+        reports2013 = repdata2013.fetchall()
+        reportsbar2013 = repbar2013.fetchall()
+        reportdict2013 = []
+        reportbar2013 = []
+        print(reports2013)
+        print(reportsbar2013)
 
-    return render_template('reports.html',report2010=reportdict, reportdetail2010 = reportbar2010)
+        for i in reports2013:
+            id = i[0]
+            year = i[1]
+            cname = str(i[2])
+            timpactscre = i[3]
+            rank = i[4]
+            numOfDis = i[5]
+            row = [id, year, cname, timpactscre, rank, numOfDis]
+            reportdict2013.append(row)
+        print(reportdict2013)
+
+
+        for i in reportsbar2013:
+            _id = i[0]
+            year = i[1]
+            cname = str(i[2])
+            drug = str(i[3])
+            disease = str(i[4])
+            impact = i[5]
+            rowbar = [_id, year, cname, drug, disease, impact, i[6], i[7], i[8]]
+            reportbar2013.append(rowbar)
+    except Exception as e:
+        print("ERROR in flask_py reports")
+    print(reportbar2013)
+
+
+    return render_template('reports.html',report2010=reportdict2010, reportdetail2010 = reportbar2010,report2013=reportdict2013, reportdetail2013 = reportbar2013)
 
 @app.route('/reports/<company>')
 def reportcomp(company):
@@ -1777,7 +1812,7 @@ def patent(year,disease):
         elif disease == 'lf':
             dat = g.db.execute(' select company, lf, color from patent2015 ')
     data = dat.fetchall()
-    print()
+
     patent1 = []
     patent2 = []
     for j in data:
