@@ -247,7 +247,7 @@
             {% set count = 0 %}
             {% for cntry in barlist %}
             <!-- {{cntry}} -->
-            <a onclick="countryclickAll({{cntry.2}})">
+            <a class="cursor-pointer" onclick="countryclickAll({{cntry.2}})">
                 <div id="" style="padding-top: 2px; font-family: 'avenir next regular', sans-serif;">{{ cntry.0.0 }}</div>
                 <div class="barfloats" style="width: {{ cntry.0.2 }}%;background-color: #FFB31C;"></div>
                 <div class="barfloats" style="width: {{ cntry.0.3 }}%;background-color: #0083CA;"></div>
