@@ -89,7 +89,7 @@
         <p class="bluefontlight">Global Drug Impact Scores</p>
         <div id="chart_div">
             {% for drug in impactpie %}
-            <a onclick="bargoclick({{ loop.index }});" title="{{ drug.0 }}: {{ drug.1 }}">
+            <a class="cursor-pointer" onclick="bargoclick({{ loop.index }});" title="{{ drug.0 }}: {{ drug.1 }}">
                 <div id="" style="padding-top: 2px; font-family: 'Nunito','sans-serif';">{{ drug.0 }}</div>
                 <div style="width: {{ drug.2 }}%;background-color:{{ drug.3 }};height: 10px;display:inline-block;font-size:0;margin-right:-4px;"></div>
             </a>
